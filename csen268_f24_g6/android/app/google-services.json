@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "241076890596",
+    "project_id": "csen-f24-g6",
+    "storage_bucket": "csen-f24-g6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:241076890596:android:cc25ce3de99362fc1f75f1",
+        "android_client_info": {
+          "package_name": "com.csen.f24.g6"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCF68Q-K4D1dwtVuRhguNoos9LwLfHkI4w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:241076890596:android:8f863ad1545bbb0f1f75f1",
+        "android_client_info": {
+          "package_name": "csen268.f24.g6"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCF68Q-K4D1dwtVuRhguNoos9LwLfHkI4w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
