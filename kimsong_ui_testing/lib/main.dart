@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kimsong_ui_testing/pages/outgame_pages/game_settings_page.dart';
 import 'package:kimsong_ui_testing/pages/outgame_pages/home_page.dart';
+import 'package:kimsong_ui_testing/pages/outgame_pages/profile_page.dart';
 
 
 void main() async {
@@ -26,7 +27,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Kimsong UI Testing',
-      home: GameSettingsPage(),
+      home: ProfilePage(),
     );
   }
 }
