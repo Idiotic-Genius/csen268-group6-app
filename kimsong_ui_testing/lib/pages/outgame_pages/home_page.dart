@@ -20,11 +20,14 @@ class HomePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  TitleImage(),
+                  TitleImages(
+                    imagePaths: ['assets/images/title.png'],
+                    columnHeight: 100,
+                  ),
                   Spacer(),
-                  GameSettingTextBox(),
+                  GameSettingTextBox(gameSettingsMode: false),
                   Spacer(),
-                  BottomMenuButtons(),
+                  BottomMenuButtons(gameSettingsMode: false),
                 ],
               ),
             ),
