@@ -31,7 +31,6 @@ class GameSettingsPage extends StatelessWidget {
                   Expanded(
                     child: GameSettingTextBox(gameSettingsMode: true),
                   ),
-                  SizedBox(height: 25),
                 ],
               ),
             ),
@@ -41,7 +40,10 @@ class GameSettingsPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                BottomMenuButtons(gameSettingsMode: true),
+                BottomMenuButtons(
+                  gameSettingsMode: true,
+                  enablePlaySettingButtons: false,
+                ),
               ],
             ),
           ),

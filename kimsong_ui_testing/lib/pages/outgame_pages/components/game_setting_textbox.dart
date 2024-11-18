@@ -59,12 +59,12 @@ class _GameSettingTextBoxState extends State<GameSettingTextBox> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        'Game Settings',
-                        style: customTextStyle(30),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
+                      // Text(
+                      //   'Game Settings',
+                      //   style: customTextStyle(30),
+                      //   textAlign: TextAlign.center,
+                      // ),
+                      // const SizedBox(height: 16),
                       for (var setting in settings)
                         _buildSettingRow(
                           setting['label'],
@@ -110,7 +110,8 @@ class _GameSettingTextBoxState extends State<GameSettingTextBox> {
     ValueChanged<double> onChanged,
   ) {
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Text(
           '$label: ${value.toInt()}',

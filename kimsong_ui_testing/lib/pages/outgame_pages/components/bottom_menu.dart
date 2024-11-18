@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 class BottomMenuButtons extends StatelessWidget {
   final bool gameSettingsMode;
+  final bool enablePlaySettingButtons;
 
   const BottomMenuButtons({
     super.key,
     required this.gameSettingsMode,
+    required this.enablePlaySettingButtons,
   });
 
   @override
@@ -36,7 +38,7 @@ class BottomMenuButtons extends StatelessWidget {
         ),
         const Spacer(),
         // Play/Settings Buttons (disable if in game settings page)
-        if (!gameSettingsMode)
+        if (enablePlaySettingButtons)
           Column(
             children: [
               InkWell(
