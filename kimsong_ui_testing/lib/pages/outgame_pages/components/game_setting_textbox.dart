@@ -1,78 +1,133 @@
 import 'package:flutter/material.dart';
+import 'text_styles.dart';
 
-class GameSettingTextBox extends StatelessWidget {
-  const GameSettingTextBox({super.key});
+class GameSettingTextBox extends StatefulWidget {
+  final bool gameSettingsMode;
+
+  const GameSettingTextBox({super.key, required this.gameSettingsMode});
+
+  @override
+  _GameSettingTextBoxState createState() => _GameSettingTextBoxState();
+}
+
+class _GameSettingTextBoxState extends State<GameSettingTextBox> {
+  double killers = 2;
+  double doctors = 1;
+  double innocents = 3;
+  double timePerRound = 30;
 
   @override
   Widget build(BuildContext context) {
+    // List of settings
+    List<Map<String, dynamic>> settings = [
+      {
+        'label': 'Killers', 'value': killers,
+        'maxValue': 3.0, 'minValue': 1.0,
+        'onChanged': (value) => setState(() => killers = value)
+      },
+      {
+        'label': 'Doctors', 'value': doctors,
+        'maxValue': 2.0, 'minValue': 1.0,
+        'onChanged': (value) => setState(() => doctors = value)
+      },
+      {
+        'label': 'Innocents', 'value': innocents,
+        'maxValue': 5.0, 'minValue': 1.0,
+        'onChanged': (value) => setState(() => innocents = value)
+      },
+      {
+        'label': 'Time Per Round (s)', 'value': timePerRound,
+        'maxValue': 60.0, 'minValue': 10.0,
+        'onChanged': (value) => setState(() => timePerRound = value)
+      },
+    ];
+
     return Container(
-      height: 200,
-      width: 350,
+      width: widget.gameSettingsMode ? 500 : 300,
       padding: const EdgeInsets.all(16.0),
       decoration: BoxDecoration(
         color: Colors.black.withOpacity(0.5),
         borderRadius: BorderRadius.circular(8),
       ),
-      child: Center(
-        child: RichText(
-          textAlign: TextAlign.center,
-          text: const TextSpan(
-            style: TextStyle(
-              fontSize: 18.0,
-              color: Colors.black,
-              fontFamily: 'IrishGrover',
-              height: 1.5,
-              shadows: [
-                Shadow(
-                  blurRadius: 2.0,
-                  color: Colors.white,
-                  offset: Offset(1.0, 1.0),
+      child: widget.gameSettingsMode // Check if scrolling is enabled
+          ? Scrollbar(
+              thumbVisibility: true,
+              thickness: 6.0,
+              radius: const Radius.circular(10),
+              child: Center(
+                child: SingleChildScrollView( // Enable scrolling
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Game Settings',
+                        style: customTextStyle(30),
+                        textAlign: TextAlign.center,
+                      ),
+                      const SizedBox(height: 16),
+                      for (var setting in settings)
+                        _buildSettingRow(
+                          setting['label'],
+                          setting['value'],
+                          setting['maxValue'],
+                          setting['minValue'],
+                          widget.gameSettingsMode,
+                          setting['onChanged'],
+                        ),
+                    ],
+                  ),
                 ),
-                Shadow(
-                  blurRadius: 2.0,
-                  color: Colors.white,
-                  offset: Offset(-1.0, -1.0),
+              ),
+            )
+          : Column( // Non-scrollable content
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Game Settings',
+                  style: customTextStyle(30),
+                  textAlign: TextAlign.center,
                 ),
-                Shadow(
-                  blurRadius: 2.0,
-                  color: Colors.white,
-                  offset: Offset(1.0, -1.0),
-                ),
-                Shadow(
-                  blurRadius: 2.0,
-                  color: Colors.white,
-                  offset: Offset(-1.0, 1.0),
-                ),
+                for (var setting in settings)
+                  _buildSettingRow(
+                    setting['label'],
+                    setting['value'],
+                    setting['maxValue'],
+                    setting['minValue'],
+                    widget.gameSettingsMode,
+                    setting['onChanged'],
+                  ),
               ],
             ),
-            children: <TextSpan>[
-              TextSpan(
-                text: 'Game Settings\n',
-                style: TextStyle(
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-              TextSpan(
-                text: 'Killers: <number>\n',
-                style: TextStyle(fontWeight: FontWeight.normal),
-              ),
-              TextSpan(
-                text: 'Doctors: <number>\n',
-                style: TextStyle(fontWeight: FontWeight.normal),
-              ),
-              TextSpan(
-                text: 'Innocents: <number>\n',
-                style: TextStyle(fontWeight: FontWeight.normal),
-              ),
-              TextSpan(
-                text: 'Time Per Round: <number>\n',
-                style: TextStyle(fontWeight: FontWeight.normal),
-              ),
-            ],
-          ),
+    );
+  }
+
+  Widget _buildSettingRow(
+    String label,
+    double value,
+    double maxValue,
+    double minValue,
+    bool showSlider,
+    ValueChanged<double> onChanged,
+  ) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '$label: ${value.toInt()}',
+          style: customTextStyle(16),
         ),
-      ),
+        if (showSlider)
+          Slider(
+            value: value,
+            min: minValue,
+            max: maxValue,
+            divisions: (maxValue - minValue).toInt(),
+            onChanged: onChanged,
+            activeColor: Colors.white,
+            inactiveColor: Colors.grey,
+          ),
+        const SizedBox(height: 8),
+      ],
     );
   }
 }
