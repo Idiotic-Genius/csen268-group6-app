@@ -1,8 +1,11 @@
 import 'package:csen268.f24.g6/firebase_options.dart';
+import 'package:csen268.f24.g6/pages/outgame_pages/game_settings_page.dart';
+import 'package:csen268.f24.g6/pages/outgame_pages/home_page.dart';
 import 'package:csen268.f24.g6/pages/outgame_pages/login_page.dart';
+import 'package:csen268.f24.g6/pages/outgame_pages/profile_page.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 
 
 
@@ -11,7 +14,19 @@ void main() async {
   await Firebase.initializeApp(
     options:DefaultFirebaseOptions.currentPlatform,
   );
-  runApp(const MyApp());
+
+  WidgetsFlutterBinding.ensureInitialized();
+  // Remove overlays for immersion
+  SystemChrome.setEnabledSystemUIMode(
+    SystemUiMode.immersive
+  );
+
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]).then((_) {
+    runApp(MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
@@ -26,7 +41,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: LoginScreen(),
+      home: GameSettingsPage(),
     );
   }
 }
