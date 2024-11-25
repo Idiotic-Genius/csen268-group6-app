@@ -25,15 +25,9 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for windows - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return windows;
       case TargetPlatform.linux:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for linux - '
@@ -52,24 +46,43 @@ class DefaultFirebaseOptions {
     messagingSenderId: '241076890596',
     projectId: 'csen-f24-g6',
     authDomain: 'csen-f24-g6.firebaseapp.com',
-    storageBucket: 'csen-f24-g6.appspot.com',
+    storageBucket: 'csen-f24-g6.firebasestorage.app',
     measurementId: 'G-QKQC628WGG',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCF68Q-K4D1dwtVuRhguNoos9LwLfHkI4w',
-    appId: '1:241076890596:android:cc25ce3de99362fc1f75f1',
+    appId: '1:241076890596:android:ace289f1acc107ac1f75f1',
     messagingSenderId: '241076890596',
     projectId: 'csen-f24-g6',
-    storageBucket: 'csen-f24-g6.appspot.com',
+    storageBucket: 'csen-f24-g6.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyBM6wR8r0bBJ5oMl_CKugtLc-pFcc-VePk',
-    appId: '1:241076890596:ios:6bdbcd12abd0ae3a1f75f1',
+    appId: '1:241076890596:ios:eb2acf6898d5fa881f75f1',
     messagingSenderId: '241076890596',
     projectId: 'csen-f24-g6',
-    storageBucket: 'csen-f24-g6.appspot.com',
-    iosBundleId: 'com.csen.f24.g6',
+    storageBucket: 'csen-f24-g6.firebasestorage.app',
+    iosBundleId: 'com.example.csen268F24G6',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyBM6wR8r0bBJ5oMl_CKugtLc-pFcc-VePk',
+    appId: '1:241076890596:ios:eb2acf6898d5fa881f75f1',
+    messagingSenderId: '241076890596',
+    projectId: 'csen-f24-g6',
+    storageBucket: 'csen-f24-g6.firebasestorage.app',
+    iosBundleId: 'com.example.csen268F24G6',
+  );
+
+  static const FirebaseOptions windows = FirebaseOptions(
+    apiKey: 'AIzaSyCCaipKmqOI0ltLgIOS7V8-fiofluL4rqQ',
+    appId: '1:241076890596:web:932a0ca94c94c96d1f75f1',
+    messagingSenderId: '241076890596',
+    projectId: 'csen-f24-g6',
+    authDomain: 'csen-f24-g6.firebaseapp.com',
+    storageBucket: 'csen-f24-g6.firebasestorage.app',
+    measurementId: 'G-HR39K3WMRH',
   );
 }
