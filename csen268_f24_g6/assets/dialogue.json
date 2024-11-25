@@ -1,0 +1,143 @@
+{
+    "npc_dialogues": [
+      {
+        "npc_name": "James",
+        "role": "Civilian",
+        "dialogue": {
+          "daytime": {
+            "early": [
+              "I saw {suspect_name} near the cabins last night. Could just be coincidence.",
+              "It’s hard to trust anyone right now, but {suspect_name} seems off.",
+              "Everyone’s on edge, but {suspect_name} stands out to me."
+            ],
+            "mid": [
+              "I’m starting to feel like {suspect_name} knows something they’re not saying.",
+              "Why isn’t anyone questioning {suspect_name} more? Feels suspicious.",
+              "{suspect_name} hasn’t said much, which makes me wonder why."
+            ],
+            "late": [
+              "If we don’t act, I think {suspect_name} will get away with this.",
+              "{suspect_name} is the only one that makes sense as the suspect now.",
+              "We need to make a decision, and {suspect_name} seems most suspicious."
+            ]
+          }
+        }
+      },
+      {
+        "npc_name": "Emma",
+        "role": "Civilian",
+        "dialogue": {
+          "daytime": {
+            "early": [
+              "{suspect_name} hasn’t been around much. That’s strange, isn’t it?",
+              "It feels like {suspect_name} is keeping something from us.",
+              "I can’t put my finger on it, but {suspect_name} doesn’t sit right with me."
+            ],
+            "mid": [
+              "{suspect_name} keeps looking over their shoulder. That’s odd, right?",
+              "Why is {suspect_name} so defensive when we talk to them?",
+              "I feel like {suspect_name} is trying to avoid attention."
+            ],
+            "late": [
+              "We don’t have time to second-guess. {suspect_name} has to be it.",
+              "{suspect_name} just doesn’t add up. It’s too suspicious.",
+              "I’m convinced now—it has to be {suspect_name}."
+            ]
+          }
+        }
+      },
+      {
+        "npc_name": "Daniel",
+        "role": "Civilian",
+        "dialogue": {
+          "daytime": {
+            "early": [
+              "Why is no one questioning {suspect_name}? They seem too quiet.",
+              "{suspect_name} has been acting different ever since this started.",
+              "I think {suspect_name} knows more than they’re letting on."
+            ],
+            "mid": [
+              "We need to keep an eye on {suspect_name}. Something doesn’t feel right.",
+              "{suspect_name} keeps avoiding eye contact. That’s suspicious.",
+              "Does anyone else think {suspect_name} is being too careful?"
+            ],
+            "late": [
+              "{suspect_name} is my strongest suspect right now. It just makes sense.",
+              "If we’re wrong about {suspect_name}, we’ll regret it. But it feels right.",
+              "I’m putting my vote on {suspect_name}. We need to act now."
+            ]
+          }
+        }
+      },
+      {
+        "npc_name": "Sarah",
+        "role": "Doctor",
+        "dialogue": {
+          "daytime": {
+            "early": [
+              "It’s hard to know who to trust, but we can’t panic yet.",
+              "I feel like we’re missing something obvious about {suspect_name}.",
+              "Right now, I’m just trying to make sure everyone stays safe."
+            ],
+            "mid": [
+              "Last night was tense. I think we need to focus on {suspect_name}.",
+              "I don’t know if we’re on the right track, but {suspect_name} is suspicious.",
+              "It’s hard to tell, but {suspect_name} keeps standing out in the wrong way."
+            ],
+            "late": [
+              "If we don’t act, this will just keep happening. {suspect_name} is our best lead.",
+              "We need to stay calm, but I think {suspect_name} is the one.",
+              "At this point, we have to take a risk, and {suspect_name} makes sense."
+            ]
+          }
+        }
+      },
+      {
+        "npc_name": "Kyle",
+        "role": "Killer",
+        "dialogue": {
+          "daytime": {
+            "early": [
+              "Why is everyone looking at me? What about {suspect_name}?",
+              "{suspect_name} keeps dodging questions. That’s worth looking into.",
+              "I don’t know what’s happening, but {suspect_name} seems suspicious."
+            ],
+            "mid": [
+              "{suspect_name} has been acting weird. Why isn’t anyone asking them more?",
+              "I think {suspect_name} is trying to avoid suspicion, and it’s working.",
+              "{suspect_name} keeps pointing fingers. That’s a red flag for me."
+            ],
+            "late": [
+              "You’re all making a mistake if you don’t consider {suspect_name}.",
+              "I’m telling you, {suspect_name} is the one you should be looking at.",
+              "If you’re wrong about this, it’s going to cost us. {suspect_name} is my pick."
+            ]
+          }
+        }
+      }
+    ],
+    "nighttime_results": {
+      "everyone_survives": [
+        "The group woke up to find that everyone survived the night.",
+        "No one was harmed last night, but the tension in the camp is palpable.",
+        "For now, the group can breathe a sigh of relief—no one was hurt.",
+        "A quiet night passed, but the fear of what might happen next lingers.",
+        "Everyone survived, but the eerie silence of the camp leaves everyone uneasy."
+      ],
+      "doctor_saves": [
+        "Thanks to the Doctor’s quick thinking, no one was harmed last night.",
+        "The Doctor successfully intervened, saving a life in the nick of time.",
+        "A targeted attack was thwarted by the Doctor, leaving the group on edge.",
+        "The Doctor made a crucial decision, preventing a tragedy from occurring.",
+        "Someone was saved from a dire fate last night, but the threat still looms."
+      ],
+      "victim_dies": [
+        "{victim_name} was found dead near the cabins in the morning.",
+        "{victim_name} didn’t survive the night, leaving the group shaken.",
+        "A chilling discovery was made at dawn—{victim_name} is no longer with us.",
+        "Tragedy struck in the night, and {victim_name} paid the ultimate price.",
+        "Morning brought heartbreak as {victim_name} was found lifeless near the campfire."
+      ]
+    }
+  }
+  
