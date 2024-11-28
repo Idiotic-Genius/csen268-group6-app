@@ -1,4 +1,5 @@
 import 'package:csen268.f24.g6/pages/outgame_pages/authservice.dart';
+import 'package:csen268.f24.g6/pages/outgame_pages/home_page.dart';
 import 'package:csen268.f24.g6/pages/outgame_pages/signup_page.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -37,13 +38,13 @@ class _LoginScreenState extends State<LoginScreen> {
       final user = await _authService.login(email, password);
       if (user != null) {
         print("User logged in");
-        // Navigate to Home Page
-        // Navigator.pushReplacement(
-        //   context,
-        //   MaterialPageRoute(
-        //     builder: (context) => HomePage(), // Replace with your home page widget
-        //   ),
-        // );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) =>
+                HomePage(), // Replace with your home page widget
+          ),
+        );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
@@ -66,6 +67,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Check if the device is in landscape mode
+    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
+
+    // Set the width and height based on landscape or portrait mode
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Set a smaller container size for landscape mode (customize the size as per your need)
+    final containerWidth = isLandscape ? (screenWidth * 0.6).toDouble() : 400.0;
+    final containerHeight = isLandscape ? (screenHeight * 1).toDouble() : 410.0;
+
     return Scaffold(
       body: Stack(
         children: [
@@ -76,137 +88,143 @@ class _LoginScreenState extends State<LoginScreen> {
                 fit: BoxFit.cover,
               ),
             ),
-            child: Center(
-              child: Container(
-                padding: const EdgeInsets.all(20),
-                width: 400,
-                height: 410,
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Login',
-                      style: GoogleFonts.irishGrover(
-                        fontSize: 48,
-                        fontWeight: FontWeight.bold,
+            child: SingleChildScrollView(  // Wrap with SingleChildScrollView
+              child: Center(
+                child: Container(
+                  padding: const EdgeInsets.all(20),
+                  width: containerWidth,
+                  height: containerHeight,
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.3),
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Login',
+                        style: GoogleFonts.irishGrover(
+                          fontSize: 48,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ),
-                    const SizedBox(height: 20),
-                    SizedBox(
-                      width: 282,
-                      height: 50,
-                      child: TextField(
-                        controller: _usernameController,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          hintText: 'Email',
-                          hintStyle: GoogleFonts.irishGrover(
-                            fontSize: 40,
-                            color: Colors.grey,
+                      const SizedBox(height: 20),
+                      SizedBox(
+                        width: 282,
+                        height: 55,
+                        child: TextField(
+                          controller: _usernameController,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            hintText: 'Email',
+                            hintStyle: GoogleFonts.irishGrover(
+                              fontSize: 40,
+                              color: Colors.black.withOpacity(0.5),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white.withOpacity(0.5),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide.none,
+                            ),
                           ),
-                          filled: true,
-                          border: OutlineInputBorder(
+                        ),
+                      ),
+                      const SizedBox(height: 15),
+                      SizedBox(
+                        width: 282,
+                        height: 55,
+                        child: TextField(
+                          controller: _passwordController,
+                          obscureText: true,
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                            hintText: 'Password',
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 15, horizontal: 10),
+                            hintStyle: GoogleFonts.irishGrover(
+                              fontSize: 40,
+                              color: Colors.black.withOpacity(0.5),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white.withOpacity(0.5),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(5),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      ElevatedButton(
+                        onPressed: _isLoading ? null : () => handleLogin(context),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.black,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 50, vertical: 15),
+                          shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
                         ),
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    SizedBox(
-                      width: 282,
-                      height: 50,
-                      child: TextField(
-                        controller: _passwordController,
-                        obscureText: true,
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          hintText: 'Password',
-                          contentPadding: const EdgeInsets.symmetric(
-                              vertical: 15, horizontal: 10),
-                          hintStyle: GoogleFonts.irishGrover(
-                            fontSize: 40,
-                            color: Colors.grey,
-                          ),
-                          filled: true,
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: _isLoading ? null : () => handleLogin(context),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 50, vertical: 15),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: _isLoading
-                          ? const SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircularProgressIndicator(
-                                color: Colors.white,
-                                strokeWidth: 2,
+                        child: _isLoading
+                            ? const SizedBox(
+                                height: 20,
+                                width: 20,
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
+                                  strokeWidth: 2,
+                                ),
+                              )
+                            : Text(
+                                'Login',
+                                style: GoogleFonts.irishGrover(
+                                  fontSize: 16,
+                                  color: Colors.white,
+                                ),
                               ),
-                            )
-                          : Text(
-                              'Login',
-                              style: GoogleFonts.irishGrover(
-                                fontSize: 16,
-                                color: Colors.white,
-                              ),
-                            ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            print('First Time');
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: Text(
-                              'FirstTime? ',
-                              style: GoogleFonts.irishGrover(
-                                fontSize: 14,
-                                color: Colors.white,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              print('First Time');
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10.0),
+                              child: Text(
+                                'FirstTime? ',
+                                style: GoogleFonts.irishGrover(
+                                  fontSize: 14,
+                                  color: Colors.white,
+                                ),
                               ),
                             ),
                           ),
-                        ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => SignupPage(),
-                              ),
-                            );
-                          },
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10.0),
-                            child: Text(
-                              'Signup',
-                              style: GoogleFonts.irishGrover(
-                                fontSize: 14,
-                                color: Color(0xFF0000EE),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => SignupPage(),
+                                ),
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10.0),
+                              child: Text(
+                                'Signup',
+                                style: GoogleFonts.irishGrover(
+                                  fontSize: 14,
+                                  color: Color(0xFF0000EE),
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                      ],
-                    ),
-                  ],
+                          )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),

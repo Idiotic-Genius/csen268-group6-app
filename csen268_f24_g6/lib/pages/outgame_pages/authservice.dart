@@ -23,6 +23,10 @@ class AuthService {
           'email': user.email,
           'playerName': playerName,
           'uid': user.uid,
+          'stats': {
+            'gamesWon': 0,
+            'gamesLost': 0,
+          }
         });
       }
 
@@ -56,4 +60,12 @@ class AuthService {
   User? getCurrentUser() {
     return _auth.currentUser;
   }
+
+   // Update the user's stats (gamesWon or gamesLost)
+  Future<void> updateUserStats(String userId, Map<String, dynamic> updatedStats) async {
+    await _firestore.collection('users').doc(userId).update({
+      'stats': updatedStats,
+    });
+  }
 }
+
