@@ -4,21 +4,13 @@ import 'package:flutter/material.dart';
 class PlayerStatsTextBox extends StatelessWidget {
   final String playerName;
   final int gamesWon;
-  final int gamesPlayed;
-  final int arrestedKillers;
-  final int escapedKillers;
-  final int innocentsSaved;
-  final int innocentsDead;
+  final int gamesLost;
 
   const PlayerStatsTextBox({
     Key? key,
     required this.playerName,
     required this.gamesWon,
-    required this.gamesPlayed,
-    required this.arrestedKillers,
-    required this.escapedKillers,
-    required this.innocentsSaved,
-    required this.innocentsDead,
+    required this.gamesLost
   }) : super(key: key);
 
   @override
@@ -41,12 +33,8 @@ class PlayerStatsTextBox extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           _buildStatRow('Games Won', gamesWon),
-          _buildStatRow('Games Played', gamesPlayed),
-          _buildStatRow('Arrested Killers', arrestedKillers),
-          _buildStatRow('Escaped Killers', escapedKillers),
-          _buildStatRow('Innocents Saved', innocentsSaved),
-          _buildStatRow('Innocents Dead', innocentsDead),
-        ],
+          _buildStatRow('Games Lost', gamesLost),
+        ]
       ),
     );
   }

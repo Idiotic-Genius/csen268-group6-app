@@ -21,23 +21,31 @@ class _GameSettingTextBoxState extends State<GameSettingTextBox> {
     // List of settings
     List<Map<String, dynamic>> settings = [
       {
-        'label': 'Killers', 'value': killers,
-        'maxValue': 3.0, 'minValue': 1.0,
+        'label': 'Killers',
+        'value': killers,
+        'maxValue': 3.0,
+        'minValue': 1.0,
         'onChanged': (value) => setState(() => killers = value)
       },
       {
-        'label': 'Doctors', 'value': doctors,
-        'maxValue': 2.0, 'minValue': 1.0,
+        'label': 'Doctors',
+        'value': doctors,
+        'maxValue': 2.0,
+        'minValue': 1.0,
         'onChanged': (value) => setState(() => doctors = value)
       },
       {
-        'label': 'Innocents', 'value': innocents,
-        'maxValue': 5.0, 'minValue': 1.0,
+        'label': 'Innocents',
+        'value': innocents,
+        'maxValue': 5.0,
+        'minValue': 1.0,
         'onChanged': (value) => setState(() => innocents = value)
       },
       {
-        'label': 'Time Per Round (s)', 'value': timePerRound,
-        'maxValue': 60.0, 'minValue': 10.0,
+        'label': 'Time Per Round (s)',
+        'value': timePerRound,
+        'maxValue': 60.0,
+        'minValue': 10.0,
         'onChanged': (value) => setState(() => timePerRound = value)
       },
     ];
@@ -55,7 +63,8 @@ class _GameSettingTextBoxState extends State<GameSettingTextBox> {
               thickness: 6.0,
               radius: const Radius.circular(10),
               child: Center(
-                child: SingleChildScrollView( // Enable scrolling
+                child: SingleChildScrollView(
+                  // Enable scrolling
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -79,7 +88,8 @@ class _GameSettingTextBoxState extends State<GameSettingTextBox> {
                 ),
               ),
             )
-          : Column( // Non-scrollable content
+          : Column(
+              // Non-scrollable content
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(

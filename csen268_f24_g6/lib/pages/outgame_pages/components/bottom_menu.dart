@@ -1,3 +1,5 @@
+import 'package:csen268.f24.g6/pages/outgame_pages/profile_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class BottomMenuButtons extends StatelessWidget {
@@ -12,6 +14,9 @@ class BottomMenuButtons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final User? currentUser = FirebaseAuth.instance.currentUser;
+    final String userId = currentUser?.uid ?? ''; // Safely get user ID
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [
@@ -51,9 +56,7 @@ class BottomMenuButtons extends StatelessWidget {
                     ),
                   ),
                 ),
-                onTap: () => {
-                  print("Pressed Play Button")
-                },
+                onTap: () => {print("Pressed Play Button")},
               ),
               InkWell(
                 child: SizedBox(
@@ -65,9 +68,7 @@ class BottomMenuButtons extends StatelessWidget {
                     ),
                   ),
                 ),
-                onTap: () => {
-                  print("Pressed Game Settings Button")
-                },
+                onTap: () => {print("Pressed Game Settings Button")},
               ),
             ],
           ),
@@ -89,6 +90,15 @@ class BottomMenuButtons extends StatelessWidget {
                 print("No button pressed");
               } else {
                 print("Profile button pressed");
+                 print("User ID in BottomMenuButtons: $userId");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ProfilePage(
+                      userId: userId,
+                    ), // Navigate to ProfilePage
+                  ),
+                );
               }
             },
           ),
