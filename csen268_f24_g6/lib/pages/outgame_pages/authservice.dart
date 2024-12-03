@@ -53,6 +53,7 @@ class AuthService {
 
   // Logout user
   Future<void> logout() async {
+    print("logout called");
     await _auth.signOut();
   }
 

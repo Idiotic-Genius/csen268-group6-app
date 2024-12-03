@@ -6,6 +6,8 @@ import 'package:csen268.f24.g6/pages/outgame_pages/components/profile_stats.dart
 import 'package:csen268.f24.g6/pages/outgame_pages/components/title_image.dart';
 import 'package:flutter/material.dart';
 
+import 'login_page.dart';
+
 class ProfilePage extends StatefulWidget {
   final String userId;
   const ProfilePage({Key? key, required this.userId}) : super(key: key);
@@ -108,6 +110,22 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
             ),
           ),
+
+          Positioned(
+            top: 16,
+            right: 16,
+            child: GestureDetector(
+              onTap: () {
+                print("logout tap executed");
+                _showLogoutConfirmationDialog(context, _authService);
+              },
+              child: Image.asset(
+                'assets/images/logout_icon.png', // Path to your logout image
+                width: 40, // Adjust width as needed
+                height: 40, // Adjust height as needed
+              ),
+            ),
+          ),
           const Padding(
             padding: EdgeInsets.only(bottom: 25),
             child: Column(
@@ -124,4 +142,38 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
     );
   }
+}
+
+void _showLogoutConfirmationDialog(BuildContext context, AuthService authService) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text("Logout"),
+        content: const Text("Are you sure you want to logout?"),
+        actions: [
+          // "No" Button: Closes the dialog
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: const Text("No"),
+          ),
+          // "Yes" Button: Logs out the user
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+              authService.logout(); // Call the logout function
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => LoginScreen()),
+              ); // Navigate to login
+            },
+            child: const Text("Yes"),
+          ),
+        ],
+      );
+    },
+  );
 }
