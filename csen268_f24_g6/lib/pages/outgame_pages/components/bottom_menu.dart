@@ -1,3 +1,5 @@
+import 'package:csen268.f24.g6/pages/ingame_pages/daytime_page.dart';
+import 'package:csen268.f24.g6/pages/outgame_pages/game_settings_page.dart';
 import 'package:csen268.f24.g6/pages/outgame_pages/profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -56,7 +58,12 @@ class BottomMenuButtons extends StatelessWidget {
                     ),
                   ),
                 ),
-                onTap: () => {print("Pressed Play Button")},
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DaytimePage(numPlayers: 5, numKillers: 1) // Navigate to ProfilePage
+                  ),
+                ),
               ),
               InkWell(
                 child: SizedBox(
@@ -68,7 +75,12 @@ class BottomMenuButtons extends StatelessWidget {
                     ),
                   ),
                 ),
-                onTap: () => {print("Pressed Game Settings Button")},
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GameSettingsPage(), // Navigate to ProfilePage
+                  ),
+                ),
               ),
             ],
           ),

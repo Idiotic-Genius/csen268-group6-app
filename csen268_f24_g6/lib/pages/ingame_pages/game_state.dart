@@ -1,114 +1,297 @@
-import 'dart:math';
+import 'dart:async';
+import 'dart:convert';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:http/http.dart' as http;
 
-final gameStateProvider = StateNotifierProvider<GameStateNotifier, GameState>(
+final gameStateProvider = StateNotifierProvider<GameStateNotifier, GameState?>(
   (ref) => GameStateNotifier(),
 );
 
-const characters = {
-  "character_1": "Jamie",
-  "character_2": "Elliot",
-  "character_3": "Amina",
-  "character_4": "Sophia",
-  "character_5": "Lila",
-  "character_6": "Noah",
-  "character_7": "Harper",
-  "character_8": "Marcus",
-  "character_9": "Ethan",
-};
-
 class GameState {
+  final String gameId;
+  final String phase;
+  final int day;
   final List<Character> characters;
-  final String currentDialogue;
+  final bool gameOver;
+  final String? winner;
+  final String? eliminatedPlayer; // Add this field
+  final String? nightMessage; // Add this field
+  final List<DialogueResponse> discussions;
 
   GameState({
+    required this.gameId,
+    required this.phase,
+    required this.day,
     required this.characters,
-    required this.currentDialogue,
+    required this.gameOver,
+    this.winner,
+    this.eliminatedPlayer, // Initialize
+    this.nightMessage, // Initialize
+    this.discussions = const [],
   });
 
-  GameState.initial()
-      : characters = [],
-        currentDialogue = "Welcome to the game!";
+  factory GameState.fromJson(Map<String, dynamic> json) {
+    final players = (json['state']['players'] as Map<String, dynamic>)
+        .entries
+        .map((entry) => Character.fromJson(entry.key, entry.value))
+        .toList();
+
+    return GameState(
+      gameId: json['game_id'] ?? "unknown",
+      phase: json['state']['phase'] ?? "unknown",
+      day: json['state']['day'] ?? 0,
+      characters: players,
+      gameOver: json['game_over'] ?? false,
+      winner: json['winner'],
+      eliminatedPlayer: json['eliminated_player'], // Parse eliminated player
+      nightMessage: json['night_message'], // Parse night message
+      discussions: [],
+    );
+  }
 }
 
-class GameStateNotifier extends StateNotifier<GameState> {
-  GameStateNotifier() : super(GameState.initial());
+class DialogueResponse {
+  final String role;
+  final String content;
+  final int day;
 
-  final Random random = Random();
+  DialogueResponse({
+    required this.role,
+    required this.content,
+    required this.day,
+  });
 
-  /// Initialize the game with the given number of killers, doctors, and innocents.
-  void initializeGame(int killers, int doctors, int innocents) {
-    final totalRoles = killers + doctors + innocents;
-    final totalCharacters = characters.length;
-
-    // Validation: Ensure the roles do not exceed the available characters
-    if (totalRoles > totalCharacters) {
-      throw Exception(
-          "Too many roles specified ($totalRoles) for the available characters ($totalCharacters).");
-    }
-
-    final roles = [
-      ...List.filled(killers, 'Killer'),
-      ...List.filled(doctors, 'Doctor'),
-      ...List.filled(innocents, 'Innocent'),
-    ];
-    roles.shuffle(random);
-
-    // Assign roles to characters from the given dataset
-    final characterList = characters.entries.toList();
-    final characterRoles = List.generate(
-      totalRoles,
-      (index) => Character(
-        id: characterList[index].key,
-        name: characterList[index].value,
-        role: roles[index],
-        spritePath: 'assets/images/${characterList[index].key}.png',
-      ),
+  factory DialogueResponse.fromJson(Map<String, dynamic> json) {
+    return DialogueResponse(
+      role: json['role'],
+      content: json['content'],
+      day: json['day'],
     );
-
-    state = GameState(
-      characters: characterRoles,
-      currentDialogue: "Game initialized! Tap a character to interact.",
-    );
-
-    print("Characters and their assigned roles:");
-    for (final character in characterRoles) {
-      print("Name: ${character.name}, Role: ${character.role}");
-    }
-  }
-
-  /// Update the current dialogue with a new message.
-  void updateDialogue(String newDialogue) {
-    state = GameState(
-      characters: state.characters,
-      currentDialogue: newDialogue,
-    );
-  }
-
-  /// Eliminate a character from the game.
-  void eliminateCharacter(Character character) {
-    state = GameState(
-      characters: state.characters.where((c) => c != character).toList(),
-      currentDialogue: "${character.name} has been eliminated!",
-    );
-  }
-
-  /// Get a character's name by ID.
-  String getCharacterName(String characterId) {
-    return characters[characterId] ?? "Unknown";
   }
 }
 
 class Character {
   final String id;
   final String name;
-  final String role; // Internal role (hidden from user)
+  final String role;
+  final bool isAlive;
   final String spritePath;
 
   Character({
     required this.id,
     required this.name,
     required this.role,
+    required this.isAlive,
     required this.spritePath,
   });
+
+  factory Character.fromJson(String id, Map<String, dynamic> json) {
+    return Character(
+      id: id,
+      name: json['name'],
+      role: json['role'],
+      isAlive: json['is_alive'],
+      spritePath: '', // To be assigned separately
+    );
+  }
+}
+
+class GameStateNotifier extends StateNotifier<GameState?> {
+  String get baseUrl {
+    return 'http://127.0.0.1:8000';
+  }
+
+  GameStateNotifier() : super(null);
+
+  /// Start a new game by interacting with the API and assign sprites.
+  Future<void> initializeGame(int numPlayers, int numKillers) async {
+    try {
+      print("Starting simple API call to initialize game...");
+
+      // Make the API call
+      final response = await http.post(
+        Uri.parse('$baseUrl/game/start'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+          'Access-Control-Allow-Headers': 'Content-Type, Accept',
+        },
+        body: jsonEncode({
+          'num_players': numPlayers,
+          'num_killers': numKillers,
+        }),
+      );
+
+      print("Response status code: ${response.statusCode}");
+      print("Response body: ${response.body}");
+
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body);
+
+        // Parse the GameState from the API response
+        final gameState = GameState.fromJson(json);
+
+        // Ensure only `numPlayers` characters are initialized
+        final List<String> spritePaths = List.generate(
+          gameState
+              .characters.length, // Generate sprites for characters in state
+          (index) => 'assets/images/character_${index + 1}.png',
+        )..shuffle();
+
+        // Assign sprites to characters
+        final List<Character> updatedCharacters =
+            gameState.characters.map((character) {
+          final spritePath =
+              spritePaths.isNotEmpty ? spritePaths.removeLast() : '';
+          return Character(
+            id: character.id,
+            name: character.name,
+            role: character.role,
+            isAlive: character.isAlive,
+            spritePath: spritePath, // Assign sprite
+          );
+        }).toList();
+
+        // Update the game state with updated characters
+        state = GameState(
+          gameId: gameState.gameId,
+          phase: gameState.phase,
+          day: gameState.day,
+          characters: updatedCharacters,
+          gameOver: gameState.gameOver,
+          winner: gameState.winner,
+        );
+
+        print("Game initialized successfully with $numPlayers players.");
+      } else {
+        print(
+            "Error: Failed to initialize game. Status Code: ${response.statusCode}");
+        print("Error Body: ${response.body}");
+        throw Exception('Failed to initialize game: ${response.body}');
+      }
+    } catch (e) {
+      print("Error during initialization: $e");
+      throw Exception('Failed to initialize game: $e');
+    }
+  }
+
+  /// Fetch the current game state from the API.
+  Future<void> fetchGameState(String gameId) async {
+    final response = await http.get(Uri.parse('$baseUrl/game/$gameId/state'));
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      state = GameState.fromJson(json);
+    } else {
+      throw Exception('Failed to fetch game state: ${response.body}');
+    }
+  }
+
+  /// Fetch discussions from the API and update the state.
+  Future<void> fetchDiscussion(String gameId) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/game/$gameId/discuss'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'message': "Discussion"}),
+    );
+
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body) as Map<String, dynamic>;
+      final responses = (json['responses'] as List<dynamic>)
+          .map((response) => DialogueResponse.fromJson(response))
+          .toList();
+
+      // Update the state with fetched discussions
+      if (state != null) {
+        state = GameState(
+          gameId: state!.gameId,
+          phase: state!.phase,
+          day: state!.day,
+          characters: state!.characters,
+          gameOver: state!.gameOver,
+          winner: state!.winner,
+          discussions: responses,
+        );
+      }
+    } else {
+      throw Exception('Failed to fetch discussion: ${response.body}');
+    }
+  }
+
+  /// Handle the voting phase.
+  /// Handle the voting phase.
+/// Handle the voting phase.
+Future<GameState?> vote(String gameId, Character target) async {
+  try {
+    print("Submitting vote for ${target.name}...");
+    
+    final response = await http.post(
+      Uri.parse('$baseUrl/game/$gameId/vote'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+      body: jsonEncode({
+        'target_id': target.id,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      final newState = GameState.fromJson(json);
+      
+      final updatedCharacters = newState.characters.map((newChar) {
+        final oldChar = state?.characters.firstWhere(
+          (oldChar) => oldChar.id == newChar.id,
+          orElse: () => newChar,
+        );
+        
+        return Character(
+          id: newChar.id,
+          name: newChar.name,
+          role: newChar.role,
+          isAlive: newChar.isAlive,
+          spritePath: oldChar!.spritePath,
+        );
+      }).toList();
+
+      // Update the state
+      state = GameState(
+        gameId: newState.gameId,
+        phase: newState.phase,
+        day: newState.day,
+        characters: updatedCharacters,
+        gameOver: newState.gameOver,
+        winner: newState.winner,
+        eliminatedPlayer: newState.eliminatedPlayer,
+        nightMessage: newState.nightMessage,
+        discussions: state?.discussions ?? [],
+      );
+
+      return state; // Return the updated state
+    } else {
+      throw Exception('Failed to submit vote: ${response.body}');
+    }
+  } catch (e) {
+    print("Error during voting: $e");
+    return null;
+  }
+}
+
+
+  /// Process the nighttime phase.
+  Future<void> processNight(String gameId) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/game/$gameId/night'),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      final json = jsonDecode(response.body);
+      state = GameState.fromJson(json);
+    } else {
+      throw Exception('Failed to process night: ${response.body}');
+    }
+  }
 }

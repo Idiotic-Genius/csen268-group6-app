@@ -1,29 +1,39 @@
+import 'package:csen268.f24.g6/pages/ingame_pages/daytime_game.dart';
 import 'package:csen268.f24.g6/pages/ingame_pages/game_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 class DialogueOverlay extends ConsumerWidget {
-  final String characterId; // Use characterId instead of directly passing the name
-  final String dialogue;
+  final String gameId;
 
   const DialogueOverlay({
     Key? key,
-    required this.characterId,
-    required this.dialogue,
+    required this.gameId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Access the GameStateNotifier to fetch the character's name dynamically
     final gameState = ref.watch(gameStateProvider);
-    final character = gameState.characters.firstWhere(
-      (char) => char.id == characterId,
-      orElse: () => Character(
-        id: "unknown",
-        name: "Unknown",
-        role: "Unknown",
-        spritePath: "",
+    final highlightedCharacterId = ref.watch(highlightedCharacterProvider); // Watch the highlighted character
+    final gameNotifier = ref.read(gameStateProvider.notifier);
+
+    if (gameState == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    // Fetch discussions if not already fetched
+    if (gameState.discussions.isEmpty) {
+      gameNotifier.fetchDiscussion(gameId);
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    // Find the dialogue for the currently highlighted character
+    final currentDialogue = gameState.discussions.firstWhere(
+      (dialogue) => dialogue.role == highlightedCharacterId,
+      orElse: () => DialogueResponse(
+        role: highlightedCharacterId,
+        content: "No dialogue available for this character.",
+        day: gameState.day,
       ),
     );
 
@@ -37,9 +47,21 @@ class DialogueOverlay extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Display the dynamically fetched character name
+            // Display character's name (if available) or their ID
             Text(
-              character.name,
+              gameState.characters
+                      .firstWhere(
+                        (character) => character.id == highlightedCharacterId,
+                        orElse: () => Character(
+                          id: highlightedCharacterId,
+                          name: "Unknown",
+                          role: "Unknown",
+                          isAlive: true,
+                          spritePath: "",
+                        ),
+                      )
+                      .name ??
+                  "Unknown Character",
               style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
@@ -47,8 +69,9 @@ class DialogueOverlay extends ConsumerWidget {
               ),
             ),
             const SizedBox(height: 8),
+            // Display the dialogue content
             Text(
-              dialogue,
+              currentDialogue.content,
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 16,
