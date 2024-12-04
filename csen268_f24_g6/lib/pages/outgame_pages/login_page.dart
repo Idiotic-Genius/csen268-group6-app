@@ -76,8 +76,8 @@ class _LoginScreenState extends State<LoginScreen> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     // Set a smaller container size for landscape mode (customize the size as per your need)
-    final containerWidth = isLandscape ? (screenWidth * 0.6).toDouble() : 400.0;
-    final containerHeight = isLandscape ? (screenHeight * 1).toDouble() : 410.0;
+    final containerWidth = isLandscape ? (screenWidth * 0.5).toDouble() : 400.0;
+    final containerHeight = isLandscape ? (screenHeight * 0.8).toDouble() : 410.0;
 
     return Scaffold(
       body: Stack(
@@ -89,143 +89,143 @@ class _LoginScreenState extends State<LoginScreen> {
                 fit: BoxFit.cover,
               ),
             ),
-            child: SingleChildScrollView(  // Wrap with SingleChildScrollView
-              child: Center(
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  width: containerWidth,
-                  height: containerHeight,
-                  decoration: BoxDecoration(
-                    color: Colors.black.withOpacity(0.3),
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Login',
-                        style: GoogleFonts.irishGrover(
-                          fontSize: 48,
-                          fontWeight: FontWeight.bold,
-                        ),
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                width: containerWidth,
+                height: containerHeight,
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Spacer(),
+                    Text(
+                      'Login',
+                      style: GoogleFonts.irishGrover(
+                        fontSize: 48,
+                        fontWeight: FontWeight.bold,
                       ),
-                      const SizedBox(height: 20),
-                      SizedBox(
-                        width: 282,
-                        height: 55,
-                        child: TextField(
-                          controller: _usernameController,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                            hintText: 'Email',
-                            hintStyle: GoogleFonts.irishGrover(
-                              fontSize: 40,
-                              color: Colors.black.withOpacity(0.5),
-                            ),
-                            filled: true,
-                            fillColor: Colors.white.withOpacity(0.5),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide.none,
-                            ),
+                    ),
+                    const SizedBox(height: 20),
+                    SizedBox(
+                      width: 282,
+                      height: 55,
+                      child: TextField(
+                        controller: _usernameController,
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                          hintText: 'Email',
+                          hintStyle: GoogleFonts.irishGrover(
+                            fontSize: 40,
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white.withOpacity(0.5),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide.none,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 15),
-                      SizedBox(
-                        width: 282,
-                        height: 55,
-                        child: TextField(
-                          controller: _passwordController,
-                          obscureText: true,
-                          textAlign: TextAlign.center,
-                          decoration: InputDecoration(
-                            hintText: 'Password',
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 15, horizontal: 10),
-                            hintStyle: GoogleFonts.irishGrover(
-                              fontSize: 40,
-                              color: Colors.black.withOpacity(0.5),
-                            ),
-                            filled: true,
-                            fillColor: Colors.white.withOpacity(0.5),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(5),
-                              borderSide: BorderSide.none,
-                            ),
+                    ),
+                    const SizedBox(height: 15),
+                    SizedBox(
+                      width: 282,
+                      height: 55,
+                      child: TextField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                          hintText: 'Password',
+                          contentPadding: const EdgeInsets.symmetric(
+                              vertical: 15, horizontal: 10),
+                          hintStyle: GoogleFonts.irishGrover(
+                            fontSize: 40,
+                            color: Colors.black.withOpacity(0.5),
+                          ),
+                          filled: true,
+                          fillColor: Colors.white.withOpacity(0.5),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5),
+                            borderSide: BorderSide.none,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: _isLoading ? null : () => handleLogin(context),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.black,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 50, vertical: 15),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                    ),
+                    const SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: _isLoading ? null : () => handleLogin(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 50, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        child: _isLoading
-                            ? const SizedBox(
-                                height: 20,
-                                width: 20,
-                                child: CircularProgressIndicator(
-                                  color: Colors.white,
-                                  strokeWidth: 2,
-                                ),
-                              )
-                            : Text(
-                                'Login',
-                                style: GoogleFonts.irishGrover(
-                                  fontSize: 16,
-                                  color: Colors.white,
-                                ),
+                      ),
+                      child: _isLoading
+                          ? const SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
                               ),
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              print('First Time');
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10.0),
-                              child: Text(
-                                'FirstTime? ',
-                                style: GoogleFonts.irishGrover(
-                                  fontSize: 14,
-                                  color: Colors.white,
-                                ),
+                            )
+                          : Text(
+                              'Login',
+                              style: GoogleFonts.irishGrover(
+                                fontSize: 16,
+                                color: Colors.white,
                               ),
                             ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => SignupPage(),
-                                ),
-                              );
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10.0),
-                              child: Text(
-                                'Signup',
-                                style: GoogleFonts.irishGrover(
-                                  fontSize: 14,
-                                  color: Color(0xFF0000EE),
-                                ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            print('First Time');
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Text(
+                              'First Time? ',
+                              style: GoogleFonts.irishGrover(
+                                fontSize: 14,
+                                color: Colors.white,
                               ),
                             ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => SignupPage(),
+                              ),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Text(
+                              'Signup',
+                              style: GoogleFonts.irishGrover(
+                                fontSize: 14,
+                                color: Color(0xFF0000EE),
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                    Spacer(),
+                  ],
                 ),
               ),
             ),

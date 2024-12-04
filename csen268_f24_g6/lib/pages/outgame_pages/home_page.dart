@@ -22,10 +22,10 @@ class HomePage extends StatelessWidget {
                 children: [
                   TitleImages(
                     imagePaths: ['assets/images/Title.png'],
-                    columnHeight: 100,
+                    columnHeight: 80,
                   ),
                   Spacer(),
-                   GameSettingTextBox(gameSettingsMode: false),
+                  GameSettingTextBox(gameSettingsMode: false),
                   Spacer(),
                   BottomMenuButtons(
                     gameSettingsMode: false,
