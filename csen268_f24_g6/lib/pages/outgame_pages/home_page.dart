@@ -15,17 +15,17 @@ class HomePage extends StatelessWidget {
         children: [
           BackgroundImage(),
           Padding(
-            padding: EdgeInsets.only(top: 25, bottom: 25),
+            padding: EdgeInsets.only(top: 10, bottom: 10),
             child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   TitleImages(
                     imagePaths: ['assets/images/Title.png'],
-                    columnHeight: 100,
+                    columnHeight: 80,
                   ),
                   Spacer(),
-                   GameSettingTextBox(gameSettingsMode: false),
+                  GameSettingTextBox(gameSettingsMode: false),
                   Spacer(),
                   BottomMenuButtons(
                     gameSettingsMode: false,

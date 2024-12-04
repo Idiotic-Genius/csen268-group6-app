@@ -1,3 +1,4 @@
+import 'package:csen268.f24.g6/pages/outgame_pages/home_page.dart';
 import 'package:csen268.f24.g6/pages/outgame_pages/profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -37,6 +38,13 @@ class BottomMenuButtons extends StatelessWidget {
                 print("Yes button pressed");
               } else {
                 print("Home button pressed");
+                print("User ID in BottomMenuButtons: $userId");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => HomePage(), // Navigate to HomePage
+                  ),
+                );
               }
             },
           ),
@@ -48,7 +56,7 @@ class BottomMenuButtons extends StatelessWidget {
             children: [
               InkWell(
                 child: SizedBox(
-                  height: 40,
+                  height: 30,
                   child: Center(
                     child: Image.asset(
                       'assets/images/play_button.png',
@@ -60,7 +68,7 @@ class BottomMenuButtons extends StatelessWidget {
               ),
               InkWell(
                 child: SizedBox(
-                  height: 40,
+                  height: 30,
                   child: Center(
                     child: Image.asset(
                       'assets/images/game_settings_button.png',
@@ -90,7 +98,7 @@ class BottomMenuButtons extends StatelessWidget {
                 print("No button pressed");
               } else {
                 print("Profile button pressed");
-                 print("User ID in BottomMenuButtons: $userId");
+                print("User ID in BottomMenuButtons: $userId");
                 Navigator.push(
                   context,
                   MaterialPageRoute(

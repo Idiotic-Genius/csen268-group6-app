@@ -74,20 +74,6 @@ class SignupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Check if the device is in landscape mode
-    final isLandscape = MediaQuery.of(context).orientation == Orientation.landscape;
-
-    // Set the width and height based on landscape or portrait mode
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
-
-    // Set a smaller container size for landscape mode (customize the size as per your need)
-    final containerWidth = isLandscape ? (screenWidth * 0.6).toDouble() : 400.0;
-    final containerHeight = isLandscape ? (screenHeight * 1).toDouble() : 470.0;
-
-    // Calculate extra padding to prevent overflow
-    final bottomPadding = screenHeight < containerHeight + 100 ? 20.0 : 0.0;
-
     return Scaffold(
       body: Stack(
         children: [
@@ -98,108 +84,105 @@ class SignupPage extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            child: SingleChildScrollView(  // Added SingleChildScrollView here
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.only(bottom: bottomPadding), // Added bottom padding
-                  child: Container(
-                    padding: const EdgeInsets.all(15),
-                    width: containerWidth,
-                    height: containerHeight,
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.3),
-                      borderRadius: BorderRadius.circular(15),
+            child: Center(
+              child: Container(
+                padding: const EdgeInsets.all(0),
+                width: 400,
+                height: 300,
+                decoration: BoxDecoration(
+                  color: Colors.black.withOpacity(0.3),
+                  borderRadius: BorderRadius.circular(15),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Spacer(),
+                    Text(
+                      'Signup',
+                      style: GoogleFonts.irishGrover(
+                        fontSize: 48,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
+                    // const SizedBox(height: 3),
+                    // Player's Name Field
+                    _buildTextField(
+                      controller: _nameController,
+                      hintText: 'PlayerName',
+                    ),
+                    const SizedBox(height: 10),
+                    // Email Field
+                    _buildTextField(
+                      controller: _usernameController,
+                      hintText: 'Email',
+                    ),
+                    const SizedBox(height: 10),
+                    // Password Field
+                    _buildTextField(
+                      controller: _passwordController,
+                      hintText: 'Password',
+                      obscureText: true,
+                    ),
+                    const SizedBox(height: 10),
+                    ElevatedButton(
+                      onPressed: () => _handleSignup(context),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 50, vertical: 15),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: Text(
+                        'Signup',
+                        style: GoogleFonts.irishGrover(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text(
-                          'Signup',
-                          style: GoogleFonts.irishGrover(
-                            fontSize: 48,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 3),
-                        // Player's Name Field
-                        _buildTextField(
-                          controller: _nameController,
-                          hintText: 'PlayerName',
-                        ),
-                        const SizedBox(height: 10),
-                        // Email Field
-                        _buildTextField(
-                          controller: _usernameController,
-                          hintText: 'Email',
-                        ),
-                        const SizedBox(height: 10),
-                        // Password Field
-                        _buildTextField(
-                          controller: _passwordController,
-                          hintText: 'Password',
-                          obscureText: true,
-                        ),
-                        const SizedBox(height: 10),
-                        ElevatedButton(
-                          onPressed: () => _handleSignup(context),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.black,
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 50, vertical: 15),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          child: Text(
-                            'Signup',
-                            style: GoogleFonts.irishGrover(
-                              fontSize: 16,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                print('Already have an account?');
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 5.0),
-                                child: Text(
-                                  'Already have an account? ',
-                                  style: GoogleFonts.irishGrover(
-                                    fontSize: 14,
-                                    color: Colors.white,
-                                  ),
-                                ),
+                        GestureDetector(
+                          onTap: () {
+                            print('Already have an account?');
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 5.0),
+                            child: Text(
+                              'Already have an account? ',
+                              style: GoogleFonts.irishGrover(
+                                fontSize: 14,
+                                color: Colors.white,
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => LoginScreen()),
-                                );
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                child: Text(
-                                  'Login',
-                                  style: GoogleFonts.irishGrover(
-                                    fontSize: 14,
-                                    color: const Color(0xFF0000EE),
-                                  ),
-                                ),
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginScreen()),
+                            );
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Text(
+                              'Login',
+                              style: GoogleFonts.irishGrover(
+                                fontSize: 14,
+                                color: const Color(0xFF0000EE),
                               ),
                             ),
-                          ],
+                          ),
                         ),
                       ],
                     ),
-                  ),
+                    Spacer(),
+                  ],
                 ),
               ),
             ),
@@ -216,15 +199,19 @@ class SignupPage extends StatelessWidget {
     bool obscureText = false,
   }) {
     return SizedBox(
-      width: 282,
-      height: 55,
+      width: 300,
+      height: 40,
       child: TextField(
         controller: controller,
         obscureText: obscureText,
         textAlign: TextAlign.center,
+        textAlignVertical: TextAlignVertical.center,
+        // maxLength: 15,
+        style: GoogleFonts.irishGrover(fontSize: 25, color: Colors.black.withOpacity(1.0)),
         decoration: InputDecoration(
+          counterText: '',
           hintText: hintText,
-          hintStyle: GoogleFonts.irishGrover(fontSize: 40, color: Colors.black.withOpacity(0.5)),
+          hintStyle: GoogleFonts.irishGrover(fontSize: 35, color: Colors.black.withOpacity(0.5)),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(5), // Sets 5 border radius
             borderSide: BorderSide.none, // Removes border lines
