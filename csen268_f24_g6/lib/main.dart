@@ -36,7 +36,11 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
+<<<<<<< HEAD
       home: const SplashScreen(),
+=======
+     home: const DaytimePage(numPlayers: 5, numKillers: 1,),
+>>>>>>> 9249cf4 (added integration)
     );
   }
 }

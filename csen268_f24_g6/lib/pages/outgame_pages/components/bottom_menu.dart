@@ -1,5 +1,10 @@
+<<<<<<< HEAD
 import 'package:csen268.f24.g6/pages/outgame_pages/game_settings_page.dart';
 import 'package:csen268.f24.g6/pages/outgame_pages/home_page.dart';
+=======
+import 'package:csen268.f24.g6/pages/ingame_pages/daytime_page.dart';
+import 'package:csen268.f24.g6/pages/outgame_pages/game_settings_page.dart';
+>>>>>>> 9249cf4 (added integration)
 import 'package:csen268.f24.g6/pages/outgame_pages/profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +70,7 @@ class BottomMenuButtons extends StatelessWidget {
         if (enablePlaySettingButtons)
           Column(
             children: [
+<<<<<<< HEAD
               AnimatedButton(
                 imageAsset: 'assets/images/play_button.png',
                 onTap: () {
@@ -90,6 +96,41 @@ class BottomMenuButtons extends StatelessWidget {
                   });
                 },
                 isCircleAvatar: false,
+=======
+              InkWell(
+                child: SizedBox(
+                  height: 40,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/play_button.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DaytimePage(numPlayers: 5, numKillers: 1) // Navigate to ProfilePage
+                  ),
+                ),
+              ),
+              InkWell(
+                child: SizedBox(
+                  height: 40,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/game_settings_button.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GameSettingsPage(), // Navigate to ProfilePage
+                  ),
+                ),
+>>>>>>> 9249cf4 (added integration)
               ),
             ],
           ),

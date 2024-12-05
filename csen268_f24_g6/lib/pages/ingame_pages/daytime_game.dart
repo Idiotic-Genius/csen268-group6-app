@@ -3,11 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'game_state.dart';
 
+final selectedCharacterProvider =
+    StateProvider<String>((ref) => ""); // Tracks the selected character's ID
+final highlightedCharacterProvider =
+    StateProvider<String>((ref) => ""); // Tracks the highlighted character's ID
+final currentCharacterIndexProvider = StateProvider<int>(
+    (ref) => 0); // Tracks the index of the highlighted character
+final hasFinishedCyclingProvider = StateProvider<bool>(
+    (ref) => false); // Tracks if the current cycle is complete
 
-final selectedCharacterProvider = StateProvider<String>((ref) => ""); // Tracks the selected character's ID
-final highlightedCharacterProvider = StateProvider<String>((ref) => ""); // Tracks the highlighted character's ID
-final currentCharacterIndexProvider = StateProvider<int>((ref) => 0); // Tracks the index of the highlighted character
-final hasFinishedCyclingProvider = StateProvider<bool>((ref) => false); // Tracks if the current cycle is complete
+final isVotingProvider = StateProvider<bool>((ref) => false);
 
 class DaytimeGame extends ConsumerWidget {
   final VoidCallback onEliminationComplete; // Callback for nighttime transition
@@ -20,6 +25,11 @@ class DaytimeGame extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(gameStateProvider);
+
+    if (gameState == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     final gameNotifier = ref.read(gameStateProvider.notifier);
 
     // Listen to the highlighted character and the current index
@@ -44,41 +54,77 @@ class DaytimeGame extends ConsumerWidget {
       }
     }
 
-    // Show elimination dialog when a cycle is complete
-    void showEliminationDialog() {
-      showDialog(
-        context: context,
-        builder: (context) {
+    // Show voting dialog when a cycle is complete
+   void showVotingDialog() {
+  showDialog(
+    context: context,
+    barrierDismissible: false,
+    builder: (dialogContext) {
+      return Consumer(
+        builder: (context, ref, _) {
+          final isVoting = ref.watch(isVotingProvider);
+          
           return AlertDialog(
-            title: Text("Eliminate a Character"),
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: gameState.characters.map((character) {
-                return ListTile(
-                  title: Text(character.name), // Show character name
-                  onTap: () {
-                    // Eliminate the selected character
-                    gameNotifier.eliminateCharacter(character);
-                    ref.read(currentCharacterIndexProvider.notifier).state = 0; // Reset index
-                    ref.read(hasFinishedCyclingProvider.notifier).state = false; // Reset cycle
-                    Navigator.of(context).pop(); // Close dialog
-
-                    // Trigger nighttime transition after elimination
-                    onEliminationComplete();
-                  },
-                );
-              }).toList(),
-            ),
+            title: const Text("Vote for a Character"),
+            content: isVoting 
+              ? const SizedBox(
+                  height: 100,
+                  child: Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                )
+              : SingleChildScrollView(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: gameState.characters
+                        .where((character) => character.isAlive)
+                        .map((character) {
+                      return ListTile(
+                        title: Text(character.name),
+                        onTap: () async {
+                          if (!isVoting) {
+                            ref.read(isVotingProvider.notifier).state = true;
+                            
+                            final updatedState = await gameNotifier.vote(
+                              gameState.gameId, 
+                              character,
+                            );
+                            
+                            if (updatedState != null && dialogContext.mounted) {
+                              Navigator.of(dialogContext).pop();
+                              
+                              // Clean up state and trigger navigation
+                              Future.microtask(() {
+                                ref.read(currentCharacterIndexProvider.notifier).state = 0;
+                                ref.read(hasFinishedCyclingProvider.notifier).state = false;
+                                ref.read(isVotingProvider.notifier).state = false;
+                                onEliminationComplete();
+                              });
+                            } else if (dialogContext.mounted) {
+                              ref.read(isVotingProvider.notifier).state = false;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('Failed to process vote. Please try again.'),
+                                ),
+                              );
+                            }
+                          }
+                        },
+                      );
+                    }).toList(),
+                  ),
+                ),
           );
         },
       );
-    }
-
+    },
+  );
+}
     // Start the highlighting cycle on tap
     return GestureDetector(
       onTap: () {
         if (hasFinishedCycling) {
-          showEliminationDialog();
+          showVotingDialog();
         } else {
           cycleToNextCharacter();
         }
@@ -111,16 +157,19 @@ class DaytimeGame extends ConsumerWidget {
                   alignment: Alignment.bottomCenter,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: gameState.characters.map((character) {
+                    children: gameState.characters
+                        .where((character) =>
+                            character.isAlive) // Show only alive characters
+                        .map((character) {
                       return Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 20.0 * scaleX),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 20.0 * scaleX),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Image.asset(
                               character.spritePath,
-                              height:
-                                  350 * scaleY * characterSizeMultiplier,
+                              height: 350 * scaleY * characterSizeMultiplier,
                             ),
                             SizedBox(height: 8 * scaleY),
                             Text(
@@ -140,10 +189,9 @@ class DaytimeGame extends ConsumerWidget {
               ),
               // Dialogue Overlay
               DialogueOverlay(
-                characterId: highlightedCharacterId.isNotEmpty ? highlightedCharacterId : "unknown",
-                dialogue: gameState.currentDialogue,
+                gameId:
+                    gameState.gameId, // Pass gameId for fetching discussions
               ),
-
             ],
           );
         },
