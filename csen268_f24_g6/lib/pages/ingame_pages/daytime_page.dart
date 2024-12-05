@@ -23,12 +23,14 @@ class DaytimePage extends ConsumerWidget {
 
     // Check for gameOver before initializing or transitioning
     if (gameState != null && gameState.gameOver) {
+      bool didWin = gameState.winner == "villagers";
+      String statType = didWin ? 'gamesWon' : 'gamesLost'; 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
             builder: (context) => WinLoseScreen(
-              didWin: gameState.winner == "villagers",
+              didWin: gameState.winner == "villagers", statType: statType,
             ),
           ),
         );
@@ -41,18 +43,6 @@ class DaytimePage extends ConsumerWidget {
 
     // Function to navigate to NighttimePage
     void navigateToNighttime() {
-      // Check for gameOver before navigating
-      if (gameState != null && gameState.gameOver) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => WinLoseScreen(
-              didWin: gameState.winner == "villagers",
-            ),
-          ),
-        );
-        return;
-      }
 
       if (gameState != null) {
         print("Navigating to nighttime...");

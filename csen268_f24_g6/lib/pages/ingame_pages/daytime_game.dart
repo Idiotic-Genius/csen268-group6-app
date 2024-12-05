@@ -166,6 +166,10 @@ class DaytimeGame extends ConsumerWidget {
           final double scaleX = constraints.maxWidth / baseWidth;
           final double scaleY = constraints.maxHeight / baseHeight;
 
+          // Check if the keyboard is open
+          final bool isKeyboardVisible =
+              MediaQuery.of(context).viewInsets.bottom > 0;
+
           // Apply a multiplier to make characters larger
           const double characterSizeMultiplier = 1.2;
 
@@ -174,50 +178,50 @@ class DaytimeGame extends ConsumerWidget {
               // Background image
               Positioned.fill(
                 child: Image.asset(
-                  'assets/images/daytime_background.jpg',
+                  'assets/images/daytime_background_1.jpg',
                   fit: BoxFit.cover,
                 ),
               ),
-              // Characters row
-              Positioned.fill(
-                child: Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: gameState.characters
-                        .where((character) =>
-                            character.isAlive) // Show only alive characters
-                        .map((character) {
-                      return Padding(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 20.0 * scaleX),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Image.asset(
-                              character.spritePath,
-                              height: 350 * scaleY * characterSizeMultiplier,
-                            ),
-                            SizedBox(height: 8 * scaleY),
-                            Text(
-                              character.name, // Show character name
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14 * scaleY * characterSizeMultiplier,
+              // Characters row (prevent scaling when the keyboard is visible)
+              if (!isKeyboardVisible)
+                Positioned.fill(
+                  child: Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: gameState.characters
+                          .where((character) => character.isAlive)
+                          .map((character) {
+                        return Padding(
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 20.0 * scaleX),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Image.asset(
+                                character.spritePath,
+                                height: 550 * scaleY * characterSizeMultiplier,
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
+                              SizedBox(height: 40 * scaleY),
+                              Text(
+                                character.name,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize:
+                                      16 * scaleY * characterSizeMultiplier,
+                                ),
+                              ),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ),
-              ),
               // Dialogue Overlay
               DialogueOverlay(
-                gameId:
-                    gameState.gameId, // Pass gameId for fetching discussions
+                gameId: gameState.gameId,
               ),
             ],
           );

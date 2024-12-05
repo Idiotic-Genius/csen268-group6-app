@@ -1,16 +1,46 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:csen268.f24.g6/pages/outgame_pages/home_page.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 class WinLoseScreen extends StatelessWidget {
-  final bool didWin; // true for win, false for lose
+  final bool didWin;
+   final String statType;  // true for win, false for lose
 
   const WinLoseScreen({
     Key? key,
     required this.didWin,
+    required this.statType,
   }) : super(key: key);
+   // Update stats when the game ends
+  Future<void> _updateStats() async {
+    final user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      try {
+        DocumentReference userRef =
+            FirebaseFirestore.instance.collection('users').doc(user.uid);
+
+        DocumentSnapshot userDoc = await userRef.get();
+        if (userDoc.exists) {
+          Map<String, dynamic> stats =
+              userDoc['stats'] ?? {'gamesWon': 0, 'gamesLost': 0};
+
+          // Increment the relevant stat
+          stats[statType] = (stats[statType] ?? 0) + 1;
+
+          // Update the stats in Firestore
+          await userRef.update({'stats': stats});
+        }
+      } catch (e) {
+        print("Error updating stats: $e");
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+      _updateStats();
     return Scaffold(
       body: Stack(
         children: [
@@ -22,7 +52,7 @@ class WinLoseScreen extends StatelessWidget {
                 BlendMode.darken,
               ),
               child: Image.asset(
-                'assets/images/daytime_background.jpg',
+                'assets/images/daytime_background_1.jpg',
                 fit: BoxFit.cover,
               ),
             ),
@@ -34,7 +64,7 @@ class WinLoseScreen extends StatelessWidget {
                   ? 'assets/images/you_win_text.png' // Win Asset
                   : 'assets/images/you_lose_text.png', // Lose Asset
               fit: BoxFit.contain,
-              width: MediaQuery.of(context).size.width * 0.8, // Responsive width
+              width: MediaQuery.of(context).size.width * 0.8, // 
             ),
           ),
           // Exit Button
@@ -48,9 +78,9 @@ class WinLoseScreen extends StatelessWidget {
                   // Navigate back to the Home Page
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                      builder: (context) => const HomePage(), // Replace with your HomePage
+                      builder: (context) => const HomePage(), 
                     ),
-                    (route) => false, // Remove all previous routes
+                    (route) => false, 
                   );
                 },
                 style: ElevatedButton.styleFrom(
