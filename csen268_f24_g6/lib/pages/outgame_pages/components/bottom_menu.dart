@@ -5,6 +5,8 @@ import 'package:csen268.f24.g6/pages/outgame_pages/profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'animated_inkwell_button.dart';
+// import 'overlays/narrator_screen.dart';
+import 'package:csen268.f24.g6/pages/ingame_pages/overlays/narrator_screen.dart';
 
 class BottomMenuButtons extends StatelessWidget {
   final bool gameSettingsMode;
@@ -32,7 +34,7 @@ class BottomMenuButtons extends StatelessWidget {
                 ? 'assets/images/yes_button.png'
                 : 'assets/images/home_button.png',
             onTap: () {
-              Future.delayed(Duration(milliseconds: 100), () {
+              if (context.mounted) {
                 if (gameSettingsMode) {
                   print("Yes button pressed");
                   // TODO: Save setting changes if any are made
@@ -57,7 +59,7 @@ class BottomMenuButtons extends StatelessWidget {
                     );
                   }
                 }
-              });
+              }
             },
           ),
         ),
@@ -76,12 +78,31 @@ class BottomMenuButtons extends StatelessWidget {
                     ),
                   ),
                 ),
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DaytimePage(numPlayers: 5, numKillers: 1) // Navigate to ProfilePage
-                  ),
-                ),
+                onTap: () {
+                  if (context.mounted) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => NarratorScreen(
+                          onComplete: () {
+                            if (context.mounted) {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => DaytimePage(
+                                    numPlayers: 5,
+                                    numKillers: 1,
+                                  ),
+                                ),
+                                (route) => false,  // This will clear the navigation stack
+                              );
+                            }
+                          },
+                        ),
+                      ),
+                    );
+                  }
+                },
               ),
               InkWell(
                 child: SizedBox(
@@ -111,7 +132,7 @@ class BottomMenuButtons extends StatelessWidget {
                 ? 'assets/images/no_button.png'
                 : 'assets/images/profile_button.png',
             onTap: () {
-              Future.delayed(Duration(milliseconds: 100), () {
+              if (context.mounted) {
                 if (gameSettingsMode) {
                   print("No button pressed");
                   if (ModalRoute.of(context)?.settings.name != '/home') {
@@ -135,7 +156,7 @@ class BottomMenuButtons extends StatelessWidget {
                     );
                   }
                 }
-              });
+              }
             },
           ),
         ),
