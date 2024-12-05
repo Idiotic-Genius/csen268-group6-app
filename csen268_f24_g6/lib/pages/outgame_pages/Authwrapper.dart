@@ -15,7 +15,14 @@ class AuthWrapper extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasData) {
           // User is logged in
-          return HomePage();
+          return Navigator(
+            onGenerateRoute: (RouteSettings settings) {
+              return MaterialPageRoute(
+                settings: const RouteSettings(name: '/home'),
+                builder: (context) => const HomePage(),
+              );
+            },
+          );
         } else {
           // User is not logged in
           return const LoginScreen();

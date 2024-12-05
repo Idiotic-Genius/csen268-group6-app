@@ -1,3 +1,5 @@
+import 'package:csen268.f24.g6/pages/outgame_pages/components/animated_elevated_button.dart';
+import 'package:csen268.f24.g6/pages/outgame_pages/components/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:csen268.f24.g6/pages/outgame_pages/login_page.dart';
@@ -11,19 +13,16 @@ class SignupPage extends StatelessWidget {
 
   SignupPage({super.key});
 
-  // Validate email format
   bool _isValidEmail(String email) {
     final emailRegex = RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$');
     return emailRegex.hasMatch(email);
   }
 
-  // Show error message
   void _showError(BuildContext context, String message) {
     ScaffoldMessenger.of(context)
         .showSnackBar(SnackBar(content: Text(message)));
   }
 
-  // Validate user input
   bool _validateInput(BuildContext context) {
     final name = _nameController.text.trim();
     final email = _usernameController.text.trim();
@@ -98,48 +97,28 @@ class SignupPage extends StatelessWidget {
                   children: [
                     Text(
                       'Signup',
-                      style: GoogleFonts.irishGrover(
-                        fontSize: 48,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: customTextStyle(48),
                     ),
-                    // const SizedBox(height: 3),
-                    // Player's Name Field
                     _buildTextField(
                       controller: _nameController,
                       hintText: 'PlayerName',
                     ),
                     const SizedBox(height: 10),
-                    // Email Field
                     _buildTextField(
                       controller: _usernameController,
                       hintText: 'Email',
                     ),
                     const SizedBox(height: 10),
-                    // Password Field
                     _buildTextField(
                       controller: _passwordController,
                       hintText: 'Password',
                       obscureText: true,
                     ),
                     const SizedBox(height: 10),
-                    ElevatedButton(
+                    AnimatedElevatedButton(
                       onPressed: () => _handleSignup(context),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black,
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 50, vertical: 10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      child: Text(
-                        'Signup',
-                        style: GoogleFonts.irishGrover(
-                          fontSize: 16,
-                          color: Colors.white,
-                        ),
-                      ),
+                      isLoading: false,
+                      buttonText: 'Signup',
                     ),
                     const SizedBox(height: 5),
                     Row(
@@ -151,10 +130,7 @@ class SignupPage extends StatelessWidget {
                           },
                           child: Text(
                             'Already have an account? ',
-                            style: GoogleFonts.irishGrover(
-                              fontSize: 14,
-                              color: Colors.white,
-                            ),
+                            style: customTextStyle(14),
                           ),
                         ),
                         GestureDetector(
@@ -206,10 +182,10 @@ class SignupPage extends StatelessWidget {
           hintText: hintText,
           hintStyle: GoogleFonts.irishGrover(fontSize: 35, color: Colors.black.withOpacity(0.5)),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(5), // Sets 5 border radius
-            borderSide: BorderSide.none, // Removes border lines
+            borderRadius: BorderRadius.circular(5),
+            borderSide: BorderSide.none,
           ),
-          filled: true, // Enables background color
+          filled: true,
           fillColor: Colors.white.withOpacity(0.5),
         ),
       ),

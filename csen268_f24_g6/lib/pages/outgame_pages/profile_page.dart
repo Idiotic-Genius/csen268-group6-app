@@ -101,8 +101,8 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   const Spacer(),
                   PlayerStatsTextBox(
-                   playerName: playerName,  // Use the fetched playerName here
-                    gamesWon: stats?['gamesWon'] ?? 0,  // Get the actual value of gamesWon
+                   playerName: playerName,
+                    gamesWon: stats?['gamesWon'] ?? 0,
                     gamesLost: stats?['gamesLost'] ?? 0
                   ),
                   const Spacer()
@@ -120,9 +120,9 @@ class _ProfilePageState extends State<ProfilePage> {
                 _showLogoutConfirmationDialog(context, _authService);
               },
               child: Image.asset(
-                'assets/images/logout_icon.png', // Path to your logout image
-                width: 40, // Adjust width as needed
-                height: 40, // Adjust height as needed
+                'assets/images/logout_icon.png',
+                width: 40,
+                height: 40,
               ),
             ),
           ),

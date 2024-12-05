@@ -1,7 +1,9 @@
+import 'package:csen268.f24.g6/pages/outgame_pages/game_settings_page.dart';
 import 'package:csen268.f24.g6/pages/outgame_pages/home_page.dart';
 import 'package:csen268.f24.g6/pages/outgame_pages/profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'animated_inkwell_button.dart';
 
 class BottomMenuButtons extends StatelessWidget {
   final bool gameSettingsMode;
@@ -16,7 +18,7 @@ class BottomMenuButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final User? currentUser = FirebaseAuth.instance.currentUser;
-    final String userId = currentUser?.uid ?? ''; // Safely get user ID
+    final String userId = currentUser?.uid ?? '';
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -24,28 +26,37 @@ class BottomMenuButtons extends StatelessWidget {
         // Home or Yes Button
         Padding(
           padding: const EdgeInsets.only(left: 50),
-          child: InkWell(
-            child: CircleAvatar(
-              radius: 30,
-              backgroundImage: AssetImage(
-                gameSettingsMode
-                    ? 'assets/images/yes_button.png'
-                    : 'assets/images/home_button.png',
-              ),
-            ),
+          child: AnimatedButton(
+            imageAsset: gameSettingsMode
+                ? 'assets/images/yes_button.png'
+                : 'assets/images/home_button.png',
             onTap: () {
-              if (gameSettingsMode) {
-                print("Yes button pressed");
-              } else {
-                print("Home button pressed");
-                print("User ID in BottomMenuButtons: $userId");
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HomePage(), // Navigate to HomePage
-                  ),
-                );
-              }
+              Future.delayed(Duration(milliseconds: 100), () {
+                if (gameSettingsMode) {
+                  print("Yes button pressed");
+                  // TODO: Save setting changes if any are made
+                  if (ModalRoute.of(context)?.settings.name != '/home') {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        settings: const RouteSettings(name: '/home'),
+                        builder: (context) => HomePage(),
+                      ),
+                    );
+                  }
+                } else {
+                  print("Home button pressed");
+                  if (ModalRoute.of(context)?.settings.name != '/home') {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        settings: const RouteSettings(name: '/home'),
+                        builder: (context) => HomePage(),
+                      ),
+                    );
+                  }
+                }
+              });
             },
           ),
         ),
@@ -54,60 +65,68 @@ class BottomMenuButtons extends StatelessWidget {
         if (enablePlaySettingButtons)
           Column(
             children: [
-              InkWell(
-                child: SizedBox(
-                  height: 30,
-                  child: Center(
-                    child: Image.asset(
-                      'assets/images/play_button.png',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                onTap: () => {print("Pressed Play Button")},
+              AnimatedButton(
+                imageAsset: 'assets/images/play_button.png',
+                onTap: () {
+                  Future.delayed(Duration(milliseconds: 100), () {
+                    print("Pressed Play Button");
+                    // TODO: Link to gameplay loop
+                  });
+                },
+                isCircleAvatar: false,
               ),
-              InkWell(
-                child: SizedBox(
-                  height: 30,
-                  child: Center(
-                    child: Image.asset(
-                      'assets/images/game_settings_button.png',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                onTap: () => {print("Pressed Game Settings Button")},
+              AnimatedButton(
+                imageAsset: 'assets/images/game_settings_button.png',
+                onTap: () {
+                  Future.delayed(Duration(milliseconds: 100), () {
+                    print("Pressed Game Settings Button");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        settings: const RouteSettings(name: '/settings'),
+                        builder: (context) => GameSettingsPage(),
+                      ),
+                    );
+                  });
+                },
+                isCircleAvatar: false,
               ),
             ],
           ),
         const Spacer(),
-        // Profile Button
+        // Profile or No Button
         Padding(
           padding: const EdgeInsets.only(right: 50),
-          child: InkWell(
-            child: CircleAvatar(
-              radius: 30,
-              backgroundImage: AssetImage(
-                gameSettingsMode
-                    ? 'assets/images/no_button.png'
-                    : 'assets/images/profile_button.png',
-              ),
-            ),
+          child: AnimatedButton(
+            imageAsset: gameSettingsMode
+                ? 'assets/images/no_button.png'
+                : 'assets/images/profile_button.png',
             onTap: () {
-              if (gameSettingsMode) {
-                print("No button pressed");
-              } else {
-                print("Profile button pressed");
-                print("User ID in BottomMenuButtons: $userId");
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ProfilePage(
-                      userId: userId,
-                    ), // Navigate to ProfilePage
-                  ),
-                );
-              }
+              Future.delayed(Duration(milliseconds: 100), () {
+                if (gameSettingsMode) {
+                  print("No button pressed");
+                  if (ModalRoute.of(context)?.settings.name != '/home') {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        settings: const RouteSettings(name: '/home'),
+                        builder: (context) => HomePage(),
+                      ),
+                    );
+                  }
+                } else {
+                  print("Profile button pressed");
+                  if (ModalRoute.of(context)?.settings.name != '/profile') {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        settings: const RouteSettings(name: '/profile'),
+                        builder: (context) => ProfilePage(userId: userId),
+                      ),
+                    );
+                  }
+                }
+              });
             },
           ),
         ),

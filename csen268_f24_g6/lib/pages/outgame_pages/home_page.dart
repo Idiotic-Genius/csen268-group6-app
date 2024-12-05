@@ -32,6 +32,7 @@ class HomePage extends StatelessWidget {
                     gameSettingsMode: false,
                     enablePlaySettingButtons: true,
                   ),
+                  Spacer()
                 ],
               ),
             ),
