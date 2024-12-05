@@ -1,3 +1,4 @@
+import 'package:csen268.f24.g6/pages/ingame_pages/nighttime_page.dart';
 import 'package:csen268.f24.g6/pages/ingame_pages/overlays/dialogue_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -63,63 +64,84 @@ class DaytimeGame extends ConsumerWidget {
       return Consumer(
         builder: (context, ref, _) {
           final isVoting = ref.watch(isVotingProvider);
-          
+
           return AlertDialog(
             title: const Text("Vote for a Character"),
-            content: isVoting 
-              ? const SizedBox(
-                  height: 100,
-                  child: Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                )
-              : SingleChildScrollView(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: gameState.characters
-                        .where((character) => character.isAlive)
-                        .map((character) {
-                      return ListTile(
-                        title: Text(character.name),
-                        onTap: () async {
-                          if (!isVoting) {
-                            ref.read(isVotingProvider.notifier).state = true;
-                            
-                            final updatedState = await gameNotifier.vote(
-                              gameState.gameId, 
-                              character,
-                            );
-                            
-                            if (updatedState != null && dialogContext.mounted) {
-                              Navigator.of(dialogContext).pop();
-                              
-                              // Clean up state and trigger navigation
-                              Future.microtask(() {
-                                ref.read(currentCharacterIndexProvider.notifier).state = 0;
-                                ref.read(hasFinishedCyclingProvider.notifier).state = false;
-                                ref.read(isVotingProvider.notifier).state = false;
-                                onEliminationComplete();
-                              });
-                            } else if (dialogContext.mounted) {
-                              ref.read(isVotingProvider.notifier).state = false;
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Failed to process vote. Please try again.'),
-                                ),
+            content: isVoting
+                ? const SizedBox(
+                    height: 100,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: gameState.characters
+                          .where((character) => character.isAlive)
+                          .map((character) {
+                        return ListTile(
+                          title: Text(character.name),
+                          onTap: () async {
+                            if (!isVoting) {
+                              ref.read(isVotingProvider.notifier).state = true;
+
+                              // Submit the vote
+                              final updatedState = await gameNotifier.vote(
+                                gameState.gameId,
+                                character,
                               );
+
+                              if (updatedState != null && dialogContext.mounted) {
+                                // Close the dialog
+                                Navigator.of(dialogContext).pop();
+
+                                // Clean up state and trigger transition
+                                Future.microtask(() {
+                                  ref
+                                      .read(currentCharacterIndexProvider
+                                          .notifier)
+                                      .state = 0;
+                                  ref
+                                      .read(hasFinishedCyclingProvider.notifier)
+                                      .state = false;
+                                  ref.read(isVotingProvider.notifier).state =
+                                      false;
+
+                                  // Navigate to NighttimePage
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => NighttimePage(
+                                        gameId: gameState.gameId,
+                                      ),
+                                    ),
+                                  );
+                                });
+                              } else if (dialogContext.mounted) {
+                                // Reset state and show error if vote fails
+                                ref.read(isVotingProvider.notifier).state = false;
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Failed to process vote. Please try again.',
+                                    ),
+                                  ),
+                                );
+                              }
                             }
-                          }
-                        },
-                      );
-                    }).toList(),
+                          },
+                        );
+                      }).toList(),
+                    ),
                   ),
-                ),
           );
         },
       );
     },
   );
 }
+
     // Start the highlighting cycle on tap
     return GestureDetector(
       onTap: () {
