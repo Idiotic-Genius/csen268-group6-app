@@ -16,8 +16,8 @@ class GameState {
   final List<Character> characters;
   final bool gameOver;
   final String? winner;
-  final String? eliminatedPlayer; // Add this field
-  final String? nightMessage; // Add this field
+  final String? eliminatedPlayer; 
+  final String? nightMessage; 
   final List<DialogueResponse> discussions;
 
   GameState({
@@ -27,8 +27,8 @@ class GameState {
     required this.characters,
     required this.gameOver,
     this.winner,
-    this.eliminatedPlayer, // Initialize
-    this.nightMessage, // Initialize
+    this.eliminatedPlayer, 
+    this.nightMessage, 
     this.discussions = const [],
   });
 
@@ -45,8 +45,8 @@ class GameState {
       characters: players,
       gameOver: json['game_over'] ?? false,
       winner: json['winner'],
-      eliminatedPlayer: json['eliminated_player'], // Parse eliminated player
-      nightMessage: json['night_message'], // Parse night message
+      eliminatedPlayer: json['eliminated_player'], 
+      nightMessage: json['night_message'], 
       discussions: [],
     );
   }
@@ -162,7 +162,7 @@ class GameStateNotifier extends StateNotifier<GameState?> {
             name: character.name,
             role: character.role,
             isAlive: character.isAlive,
-            spritePath: spritePath, // Assign sprite
+            spritePath: spritePath, 
           );
         }).toList();
 
@@ -305,7 +305,7 @@ class GameStateNotifier extends StateNotifier<GameState?> {
               "ID: ${character.id}, Name: ${character.name}, Role: ${character.role}, IsAlive: ${character.isAlive}, SpritePath: ${character.spritePath}");
         });
 
-        return state; // Return the updated state
+        return state; 
       } else {
         throw Exception('Failed to submit vote: ${response.body}');
       }
@@ -315,8 +315,7 @@ class GameStateNotifier extends StateNotifier<GameState?> {
     }
   }
 
-  /// Process the nighttime phase.
-  /// Process the nighttime phase and update the game state.
+  /// Process the nighttime phase
   Future<void> processNight(String gameId) async {
     try {
       final response = await http.post(
@@ -343,7 +342,7 @@ class GameStateNotifier extends StateNotifier<GameState?> {
             role: newChar.role,
             isAlive: newChar.isAlive,
             spritePath:
-                oldChar?.spritePath ?? '', // Retain spritePath if available
+                oldChar?.spritePath ?? '', 
           );
         }).toList();
 
@@ -360,7 +359,6 @@ class GameStateNotifier extends StateNotifier<GameState?> {
           discussions: state?.discussions ?? [],
         );
 
-        // Debug print to verify updated game state
         print("Updated GameState After Night:");
         print("Game ID: ${state?.gameId}");
         print("Phase: ${state?.phase}");
