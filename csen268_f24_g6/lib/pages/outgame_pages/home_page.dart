@@ -4,22 +4,38 @@ import 'package:csen268.f24.g6/pages/outgame_pages/components/game_setting_textb
 import 'package:csen268.f24.g6/pages/outgame_pages/components/title_image.dart';
 import 'package:flutter/material.dart';
 
+import '../ingame_pages/musicController.dart';
+
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
+
+  final ValueNotifier<bool> isMuted = ValueNotifier<bool>(false); // Tracks mute state
+
+  void toggleMusic() {
+    MusicController().stopMusic();
+    print("toggle value");
+    isMuted.value = !isMuted.value; // Toggle mute state
+
+    if (isMuted.value) {
+      MusicController().stopMusic(); // Stop music when muted
+    } else {
+      MusicController().playInitialMusic(); // Play initial music when unmuted
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Stack(
         fit: StackFit.expand,
         children: [
-          BackgroundImage(),
+          const BackgroundImage(),
           Padding(
-            padding: EdgeInsets.only(top: 25, bottom: 25),
+            padding: const EdgeInsets.only(top: 25, bottom: 25),
             child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+                children: const [
                   TitleImages(
                     imagePaths: ['assets/images/Title.png'],
                     columnHeight: 80,
@@ -33,6 +49,26 @@ class HomePage extends StatelessWidget {
                   ),
                 ],
               ),
+            ),
+          ),
+          // Mute/Unmute Button Positioned at Top-Left Corner
+          Positioned(
+            top: 20,
+            left: 20,
+            child: ValueListenableBuilder<bool>(
+              valueListenable: isMuted,
+              builder: (context, value, child) {
+                return GestureDetector(
+                  onTap: toggleMusic, // Call toggleMusic on image tap
+                  child: Image.asset(
+                    value
+                        ? 'assets/images/volume-mute.png' // Mute image
+                        : 'assets/images/volume.png', // Unmute image
+                    width: 50,
+                    height: 50,
+                  ),
+                );
+              },
             ),
           ),
         ],
