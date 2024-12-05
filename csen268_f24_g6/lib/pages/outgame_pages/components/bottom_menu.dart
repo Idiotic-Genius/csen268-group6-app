@@ -5,6 +5,8 @@ import 'package:csen268.f24.g6/pages/outgame_pages/profile_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'animated_inkwell_button.dart';
+// import 'overlays/narrator_screen.dart';
+import 'package:csen268.f24.g6/pages/ingame_pages/overlays/narrator_screen.dart';
 
 class BottomMenuButtons extends StatelessWidget {
   final bool gameSettingsMode;
@@ -32,7 +34,7 @@ class BottomMenuButtons extends StatelessWidget {
                 ? 'assets/images/yes_button.png'
                 : 'assets/images/home_button.png',
             onTap: () {
-              Future.delayed(Duration(milliseconds: 100), () {
+              if (context.mounted) {
                 if (gameSettingsMode) {
                   print("Yes button pressed");
                   // TODO: Save setting changes if any are made
@@ -41,7 +43,7 @@ class BottomMenuButtons extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         settings: const RouteSettings(name: '/home'),
-                        builder: (context) => HomePage(),
+                        builder: (context) => const HomePage(),
                       ),
                     );
                   }
@@ -52,12 +54,12 @@ class BottomMenuButtons extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         settings: const RouteSettings(name: '/home'),
-                        builder: (context) => HomePage(),
+                        builder: (context) => const HomePage(),
                       ),
                     );
                   }
                 }
-              });
+              }
             },
           ),
         ),
@@ -69,13 +71,28 @@ class BottomMenuButtons extends StatelessWidget {
               AnimatedButton(
                 imageAsset: 'assets/images/play_button.png',
                 onTap: () {
-                  Future.delayed(Duration(milliseconds: 100), () {
+                  Future.delayed(const Duration(milliseconds: 100), () {
                     print("Pressed Play Button");
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => DaytimePage(numPlayers: 5, numKillers: 1)
-                      )
+                        builder: (context) => NarratorScreen(
+                          onComplete: () {
+                            if (context.mounted) {
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const DaytimePage(
+                                    numPlayers: 5,
+                                    numKillers: 1,
+                                  ),
+                                ),
+                                (route) => false,  // This will clear the navigation stack
+                              );
+                            }
+                          },
+                        ),
+                      ),
                     );
                   });
                 },
@@ -84,11 +101,11 @@ class BottomMenuButtons extends StatelessWidget {
               AnimatedButton(
                 imageAsset: 'assets/images/game_settings_button.png',
                 onTap: () {
-                  Future.delayed(Duration(milliseconds: 100), () {
+                  Future.delayed(const Duration(milliseconds: 100), () {
                     print("Pressed Game Settings");
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => GameSettingsPage())
+                      MaterialPageRoute(builder: (context) => const GameSettingsPage())
                     );
                   });
                 },
@@ -105,7 +122,7 @@ class BottomMenuButtons extends StatelessWidget {
                 ? 'assets/images/no_button.png'
                 : 'assets/images/profile_button.png',
             onTap: () {
-              Future.delayed(Duration(milliseconds: 100), () {
+              if (context.mounted) {
                 if (gameSettingsMode) {
                   print("No button pressed");
                   if (ModalRoute.of(context)?.settings.name != '/home') {
@@ -113,7 +130,7 @@ class BottomMenuButtons extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                         settings: const RouteSettings(name: '/home'),
-                        builder: (context) => HomePage(),
+                        builder: (context) => const HomePage(),
                       ),
                     );
                   }
@@ -129,7 +146,7 @@ class BottomMenuButtons extends StatelessWidget {
                     );
                   }
                 }
-              });
+              }
             },
           ),
         ),
