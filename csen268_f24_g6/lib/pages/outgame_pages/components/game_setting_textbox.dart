@@ -18,7 +18,6 @@ class _GameSettingTextBoxState extends State<GameSettingTextBox> {
 
   @override
   Widget build(BuildContext context) {
-    // List of settings
     List<Map<String, dynamic>> settings = [
       {
         'label': 'Killers',
@@ -60,7 +59,7 @@ class _GameSettingTextBoxState extends State<GameSettingTextBox> {
             color: Colors.black.withOpacity(0.5),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: widget.gameSettingsMode // Check if scrolling is enabled
+          child: widget.gameSettingsMode
               ? Scrollbar(
                   thumbVisibility: true,
                   thickness: 6.0,
@@ -71,12 +70,6 @@ class _GameSettingTextBoxState extends State<GameSettingTextBox> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          // Text(
-                          //   'Game Settings',
-                          //   style: customTextStyle(30),
-                          //   textAlign: TextAlign.center,
-                          // ),
-                          // const SizedBox(height: 16),
                           for (var setting in settings)
                             _buildSettingRow(
                               setting['label'],
@@ -143,7 +136,6 @@ class _GameSettingTextBoxState extends State<GameSettingTextBox> {
             activeColor: Colors.white,
             inactiveColor: Colors.grey,
           ),
-        // const SizedBox(height: 2),
       ],
     );
   }

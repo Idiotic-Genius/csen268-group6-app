@@ -19,8 +19,6 @@ class PlayerStatsTextBox extends StatelessWidget {
       children: [
         Spacer(),
         Container(
-          // height: 200,
-          // width: 400,
           padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 10.0, bottom: 10.0),
           decoration: BoxDecoration(
             color: Colors.black.withOpacity(0.5),
