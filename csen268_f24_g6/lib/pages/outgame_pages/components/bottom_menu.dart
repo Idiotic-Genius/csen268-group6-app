@@ -1,3 +1,4 @@
+import 'package:csen268.f24.g6/pages/ingame_pages/daytime_page.dart';
 import 'package:csen268.f24.g6/pages/outgame_pages/game_settings_page.dart';
 import 'package:csen268.f24.g6/pages/outgame_pages/home_page.dart';
 import 'package:csen268.f24.g6/pages/outgame_pages/profile_page.dart';
@@ -65,31 +66,39 @@ class BottomMenuButtons extends StatelessWidget {
         if (enablePlaySettingButtons)
           Column(
             children: [
-              AnimatedButton(
-                imageAsset: 'assets/images/play_button.png',
-                onTap: () {
-                  Future.delayed(Duration(milliseconds: 100), () {
-                    print("Pressed Play Button");
-                    // TODO: Link to gameplay loop
-                  });
-                },
-                isCircleAvatar: false,
+              InkWell(
+                child: SizedBox(
+                  height: 40,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/play_button.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DaytimePage(numPlayers: 5, numKillers: 1) // Navigate to ProfilePage
+                  ),
+                ),
               ),
-              AnimatedButton(
-                imageAsset: 'assets/images/game_settings_button.png',
-                onTap: () {
-                  Future.delayed(Duration(milliseconds: 100), () {
-                    print("Pressed Game Settings Button");
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        settings: const RouteSettings(name: '/settings'),
-                        builder: (context) => GameSettingsPage(),
-                      ),
-                    );
-                  });
-                },
-                isCircleAvatar: false,
+              InkWell(
+                child: SizedBox(
+                  height: 40,
+                  child: Center(
+                    child: Image.asset(
+                      'assets/images/game_settings_button.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => GameSettingsPage(), // Navigate to ProfilePage
+                  ),
+                ),
               ),
             ],
           ),
