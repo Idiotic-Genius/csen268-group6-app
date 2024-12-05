@@ -22,7 +22,7 @@ void main() async {
   );
 
   WidgetsFlutterBinding.ensureInitialized();
-  // Remove overlays for immersion
+  
   SystemChrome.setEnabledSystemUIMode(
     SystemUiMode.immersive,
   );
