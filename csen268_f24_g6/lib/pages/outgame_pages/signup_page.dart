@@ -1,4 +1,5 @@
 import 'package:csen268.f24.g6/pages/outgame_pages/components/animated_elevated_button.dart';
+import 'package:csen268.f24.g6/pages/outgame_pages/components/background_image.dart';
 import 'package:csen268.f24.g6/pages/outgame_pages/components/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -76,84 +77,77 @@ class SignupPage extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          Container(
-            decoration: const BoxDecoration(
-              image: DecorationImage(
-                image: AssetImage('assets/images/backgroundimage.webp'),
-                fit: BoxFit.cover,
+          const BackgroundImage(),
+          Center(
+            child: Container(
+              padding: const EdgeInsets.all(0),
+              width: 400,
+              height: 300,
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.3),
+                borderRadius: BorderRadius.circular(15),
               ),
-            ),
-            child: Center(
-              child: Container(
-                padding: const EdgeInsets.all(0),
-                width: 400,
-                height: 300,
-                decoration: BoxDecoration(
-                  color: Colors.black.withOpacity(0.3),
-                  borderRadius: BorderRadius.circular(15),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      'Signup',
-                      style: customTextStyle(48),
-                    ),
-                    _buildTextField(
-                      controller: _nameController,
-                      hintText: 'PlayerName',
-                    ),
-                    const SizedBox(height: 10),
-                    _buildTextField(
-                      controller: _usernameController,
-                      hintText: 'Email',
-                    ),
-                    const SizedBox(height: 10),
-                    _buildTextField(
-                      controller: _passwordController,
-                      hintText: 'Password',
-                      obscureText: true,
-                    ),
-                    const SizedBox(height: 10),
-                    AnimatedElevatedButton(
-                      onPressed: () => _handleSignup(context),
-                      isLoading: false,
-                      buttonText: 'Signup',
-                    ),
-                    const SizedBox(height: 5),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            print('Already have an account?');
-                          },
-                          child: Text(
-                            'Already have an account? ',
-                            style: customTextStyle(14),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Signup',
+                    style: customTextStyle(48),
+                  ),
+                  _buildTextField(
+                    controller: _nameController,
+                    hintText: 'PlayerName',
+                  ),
+                  const SizedBox(height: 10),
+                  _buildTextField(
+                    controller: _usernameController,
+                    hintText: 'Email',
+                  ),
+                  const SizedBox(height: 10),
+                  _buildTextField(
+                    controller: _passwordController,
+                    hintText: 'Password',
+                    obscureText: true,
+                  ),
+                  const SizedBox(height: 10),
+                  AnimatedElevatedButton(
+                    onPressed: () => _handleSignup(context),
+                    isLoading: false,
+                    buttonText: 'Signup',
+                  ),
+                  const SizedBox(height: 5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          print('Already have an account?');
+                        },
+                        child: Text(
+                          'Already have an account? ',
+                          style: customTextStyle(14),
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const LoginScreen()),
+                          );
+                        },
+                        child: Text(
+                          'Login',
+                          style: GoogleFonts.irishGrover(
+                            fontSize: 14,
+                            color: const Color(0xFF0000EE),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => const LoginScreen()),
-                            );
-                          },
-                          child: Text(
-                            'Login',
-                            style: GoogleFonts.irishGrover(
-                              fontSize: 14,
-                              color: const Color(0xFF0000EE),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Spacer(),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  const Spacer(),
+                ],
               ),
             ),
           ),

@@ -52,7 +52,9 @@ class WinLoseScreen extends StatelessWidget {
                 BlendMode.darken,
               ),
               child: Image.asset(
-                'assets/images/daytime_background_1.jpg',
+                didWin
+                  ? '/images/daytime_background.gif'
+                  : '/images/nighttime_background.gif',
                 fit: BoxFit.cover,
               ),
             ),
@@ -61,10 +63,10 @@ class WinLoseScreen extends StatelessWidget {
           Center(
             child: Image.asset(
               didWin
-                  ? 'assets/images/you_win_text.png' // Win Asset
-                  : 'assets/images/you_lose_text.png', // Lose Asset
+                  ? 'assets/images/you_win_text.png'
+                  : 'assets/images/you_lose_text.png',
               fit: BoxFit.contain,
-              width: MediaQuery.of(context).size.width * 0.8, // 
+              width: MediaQuery.of(context).size.width * 0.8,
             ),
           ),
           // Exit Button
@@ -78,9 +80,9 @@ class WinLoseScreen extends StatelessWidget {
                   // Navigate back to the Home Page
                   Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
-                      builder: (context) => const HomePage(), 
+                      builder: (context) => const HomePage(),
                     ),
-                    (route) => false, 
+                    (route) => false,
                   );
                 },
                 style: ElevatedButton.styleFrom(

@@ -66,39 +66,33 @@ class BottomMenuButtons extends StatelessWidget {
         if (enablePlaySettingButtons)
           Column(
             children: [
-              InkWell(
-                child: SizedBox(
-                  height: 40,
-                  child: Center(
-                    child: Image.asset(
-                      'assets/images/play_button.png',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => DaytimePage(numPlayers: 5, numKillers: 1) // Navigate to ProfilePage
-                  ),
-                ),
+              AnimatedButton(
+                imageAsset: 'assets/images/play_button.png',
+                onTap: () {
+                  Future.delayed(Duration(milliseconds: 100), () {
+                    print("Pressed Play Button");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => DaytimePage(numPlayers: 5, numKillers: 1)
+                      )
+                    );
+                  });
+                },
+                isCircleAvatar: false,
               ),
-              InkWell(
-                child: SizedBox(
-                  height: 40,
-                  child: Center(
-                    child: Image.asset(
-                      'assets/images/game_settings_button.png',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                onTap: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => GameSettingsPage(), // Navigate to ProfilePage
-                  ),
-                ),
+              AnimatedButton(
+                imageAsset: 'assets/images/game_settings_button.png',
+                onTap: () {
+                  Future.delayed(Duration(milliseconds: 100), () {
+                    print("Pressed Game Settings");
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => GameSettingsPage())
+                    );
+                  });
+                },
+                isCircleAvatar: false,
               ),
             ],
           ),
