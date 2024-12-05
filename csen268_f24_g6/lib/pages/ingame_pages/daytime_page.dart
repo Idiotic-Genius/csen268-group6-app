@@ -30,7 +30,9 @@ class DaytimePage extends ConsumerWidget {
           context,
           MaterialPageRoute(
             builder: (context) => WinLoseScreen(
-              didWin: gameState.winner == "villagers", statType: statType,
+              didWin: gameState.winner == "villagers",
+              statType: statType,
+              characters: gameState.characters,
             ),
           ),
         );

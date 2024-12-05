@@ -21,17 +21,17 @@ class NighttimePage extends ConsumerWidget {
 
         // If the game is over, navigate to the WinLoseScreen
         if (gameState != null && gameState.gameOver) {
-
           bool didWin = gameState.winner == "villagers";
-           String statType = didWin ? 'gamesWon' : 'gamesLost';
-
+          String statType = didWin ? 'gamesWon' : 'gamesLost'; 
 
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => WinLoseScreen(didWin: didWin,
-               statType: statType,),
-
+              builder: (context) => WinLoseScreen(
+                didWin: didWin,
+                statType: statType,
+                characters: gameState.characters,
+              ),
             ),
           );
         }
