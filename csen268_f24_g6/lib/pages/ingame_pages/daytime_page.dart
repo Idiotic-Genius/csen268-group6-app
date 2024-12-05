@@ -1,8 +1,10 @@
+import 'package:csen268.f24.g6/pages/ingame_pages/overlays/win_lose_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'game_state.dart';
 import 'daytime_game.dart';
 import 'nighttime_page.dart';
+
 
 class DaytimePage extends ConsumerWidget {
   final int numPlayers;
@@ -19,11 +21,39 @@ class DaytimePage extends ConsumerWidget {
     final gameNotifier = ref.read(gameStateProvider.notifier);
     final gameState = ref.watch(gameStateProvider);
 
+    // Check for gameOver before initializing or transitioning
+    if (gameState != null && gameState.gameOver) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => WinLoseScreen(
+              didWin: gameState.winner == "villagers",
+            ),
+          ),
+        );
+      });
+      return const Center(child: CircularProgressIndicator());
+    }
+
     // Initialize the game state if it's null
     _initializeGame(context, gameNotifier, gameState);
 
     // Function to navigate to NighttimePage
     void navigateToNighttime() {
+      // Check for gameOver before navigating
+      if (gameState != null && gameState.gameOver) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => WinLoseScreen(
+              didWin: gameState.winner == "villagers",
+            ),
+          ),
+        );
+        return;
+      }
+
       if (gameState != null) {
         print("Navigating to nighttime...");
         print(gameState.phase);

@@ -7,8 +7,6 @@ final gameStateProvider = StateNotifierProvider<GameStateNotifier, GameState?>(
   (ref) => GameStateNotifier(),
 );
 
-
-
 class GameState {
   final String gameId;
   final String phase;
@@ -194,109 +192,183 @@ class GameStateNotifier extends StateNotifier<GameState?> {
 
   /// Fetch discussions from the API and update the state.
   Future<void> fetchDiscussion(String gameId, String message) async {
-  try {
-    final response = await http.post(
-      Uri.parse('$baseUrl/game/$gameId/discuss'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'message': message}),
-    );
-
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body) as Map<String, dynamic>;
-      final responses = (json['responses'] as List<dynamic>)
-          .map((response) => DialogueResponse.fromJson(response))
-          .toList();
-
-      // Update state with new discussions
-      if (state != null) {
-        state = GameState(
-          gameId: state!.gameId,
-          phase: state!.phase,
-          day: state!.day,
-          characters: state!.characters,
-          gameOver: state!.gameOver,
-          winner: state!.winner,
-          discussions: responses,
-        );
-      }
-    } else {
-      throw Exception('Failed to fetch discussion: ${response.body}');
-    }
-  } catch (e) {
-    print("Error fetching discussion: $e");
-  }
-}
-/// Handle the voting phase.
-Future<GameState?> vote(String gameId, Character target) async {
-  try {
-    print("Submitting vote for ${target.name}...");
-    
-    final response = await http.post(
-      Uri.parse('$baseUrl/game/$gameId/vote'),
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-      },
-      body: jsonEncode({
-        'target_id': target.id,
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body);
-      final newState = GameState.fromJson(json);
-      
-      final updatedCharacters = newState.characters.map((newChar) {
-        final oldChar = state?.characters.firstWhere(
-          (oldChar) => oldChar.id == newChar.id,
-          orElse: () => newChar,
-        );
-        
-        return Character(
-          id: newChar.id,
-          name: newChar.name,
-          role: newChar.role,
-          isAlive: newChar.isAlive,
-          spritePath: oldChar!.spritePath,
-        );
-      }).toList();
-
-      // Update the state
-      state = GameState(
-        gameId: newState.gameId,
-        phase: newState.phase,
-        day: newState.day,
-        characters: updatedCharacters,
-        gameOver: newState.gameOver,
-        winner: newState.winner,
-        eliminatedPlayer: newState.eliminatedPlayer,
-        nightMessage: newState.nightMessage,
-        discussions: state?.discussions ?? [],
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/game/$gameId/discuss'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'message': message}),
       );
 
-      return state; // Return the updated state
-    } else {
-      throw Exception('Failed to submit vote: ${response.body}');
-    }
-  } catch (e) {
-    print("Error during voting: $e");
-    return null;
-  }
-}
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body) as Map<String, dynamic>;
+        final responses = (json['responses'] as List<dynamic>)
+            .map((response) => DialogueResponse.fromJson(response))
+            .toList();
 
+        // Update state with new discussions
+        if (state != null) {
+          state = GameState(
+            gameId: state!.gameId,
+            phase: state!.phase,
+            day: state!.day,
+            characters: state!.characters,
+            gameOver: state!.gameOver,
+            winner: state!.winner,
+            discussions: responses,
+          );
+        }
+      } else {
+        throw Exception('Failed to fetch discussion: ${response.body}');
+      }
+    } catch (e) {
+      print("Error fetching discussion: $e");
+    }
+  }
+
+  /// Handle the voting phase.
+  Future<GameState?> vote(String gameId, Character target) async {
+    try {
+      print("Submitting vote for ${target.name}...");
+
+      final response = await http.post(
+        Uri.parse('$baseUrl/game/$gameId/vote'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: jsonEncode({
+          'target_id': target.id,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body);
+        final newState = GameState.fromJson(json);
+
+        final updatedCharacters = newState.characters.map((newChar) {
+          final oldChar = state?.characters.firstWhere(
+            (oldChar) => oldChar.id == newChar.id,
+            orElse: () => newChar,
+          );
+
+          return Character(
+            id: newChar.id,
+            name: newChar.name,
+            role: newChar.role,
+            isAlive: newChar.isAlive,
+            spritePath: oldChar!.spritePath,
+          );
+        }).toList();
+
+        // Debug print to check updatedCharacters
+        print("Updated Characters Data:");
+        updatedCharacters.forEach((character) {
+          print(
+              "ID: ${character.id}, Name: ${character.name}, Role: ${character.role}, IsAlive: ${character.isAlive}, SpritePath: ${character.spritePath}");
+        });
+
+        // Update the state
+        state = GameState(
+          gameId: state!.gameId,
+          phase: newState.phase,
+          day: newState.day,
+          characters: updatedCharacters,
+          gameOver: newState.gameOver,
+          winner: newState.winner,
+          eliminatedPlayer: newState.eliminatedPlayer,
+          nightMessage: newState.nightMessage,
+          discussions: [],
+        );
+
+        // Debug print to check updated GameState
+        print("Updated GameState:");
+        print("Game ID: ${state?.gameId}");
+        print("Phase: ${state?.phase}");
+        print("Day: ${state?.day}");
+        print("Game Over: ${state?.gameOver}");
+        print("Winner: ${state?.winner}");
+        print("Eliminated Player: ${state?.eliminatedPlayer}");
+        print("Night Message: ${state?.nightMessage}");
+        print("Characters:");
+        state?.characters.forEach((character) {
+          print(
+              "ID: ${character.id}, Name: ${character.name}, Role: ${character.role}, IsAlive: ${character.isAlive}, SpritePath: ${character.spritePath}");
+        });
+
+        return state; // Return the updated state
+      } else {
+        throw Exception('Failed to submit vote: ${response.body}');
+      }
+    } catch (e) {
+      print("Error during voting: $e");
+      return null;
+    }
+  }
 
   /// Process the nighttime phase.
+  /// Process the nighttime phase and update the game state.
   Future<void> processNight(String gameId) async {
-    final response = await http.post(
-      Uri.parse('$baseUrl/game/$gameId/night'),
-      headers: {'Content-Type': 'application/json'},
-    );
+    try {
+      final response = await http.post(
+        Uri.parse('$baseUrl/game/$gameId/night'),
+        headers: {'Content-Type': 'application/json'},
+      );
 
-    if (response.statusCode == 200) {
-      final json = jsonDecode(response.body);
-      state = GameState.fromJson(json);
-    } else {
-      throw Exception('Failed to process night: ${response.body}');
+      if (response.statusCode == 200) {
+        final json = jsonDecode(response.body);
+
+        // Parse and update the game state
+        final newState = GameState.fromJson(json);
+
+        // Update character sprites from the existing state
+        final updatedCharacters = newState.characters.map((newChar) {
+          final oldChar = state?.characters.firstWhere(
+            (oldChar) => oldChar.id == newChar.id,
+            orElse: () => newChar,
+          );
+
+          return Character(
+            id: newChar.id,
+            name: newChar.name,
+            role: newChar.role,
+            isAlive: newChar.isAlive,
+            spritePath:
+                oldChar?.spritePath ?? '', // Retain spritePath if available
+          );
+        }).toList();
+
+        // Update the state
+        state = GameState(
+          gameId: state!.gameId,
+          phase: newState.phase,
+          day: newState.day,
+          characters: updatedCharacters,
+          gameOver: newState.gameOver,
+          winner: newState.winner,
+          eliminatedPlayer: newState.eliminatedPlayer,
+          nightMessage: newState.nightMessage,
+          discussions: state?.discussions ?? [],
+        );
+
+        // Debug print to verify updated game state
+        print("Updated GameState After Night:");
+        print("Game ID: ${state?.gameId}");
+        print("Phase: ${state?.phase}");
+        print("Day: ${state?.day}");
+        print("Game Over: ${state?.gameOver}");
+        print("Winner: ${state?.winner}");
+        print("Eliminated Player: ${state?.eliminatedPlayer}");
+        print("Night Message: ${state?.nightMessage}");
+        print("Characters:");
+        state?.characters.forEach((character) {
+          print(
+              "ID: ${character.id}, Name: ${character.name}, Role: ${character.role}, IsAlive: ${character.isAlive}, SpritePath: ${character.spritePath}");
+        });
+      } else {
+        throw Exception('Failed to process nighttime: ${response.body}');
+      }
+    } catch (e) {
+      print("Error during nighttime processing: $e");
     }
   }
 }

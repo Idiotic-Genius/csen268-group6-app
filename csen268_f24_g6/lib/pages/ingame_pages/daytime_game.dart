@@ -56,91 +56,96 @@ class DaytimeGame extends ConsumerWidget {
     }
 
     // Show voting dialog when a cycle is complete
-   void showVotingDialog() {
-  showDialog(
-    context: context,
-    barrierDismissible: false,
-    builder: (dialogContext) {
-      return Consumer(
-        builder: (context, ref, _) {
-          final isVoting = ref.watch(isVotingProvider);
+    void showVotingDialog() {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (dialogContext) {
+          return Consumer(
+            builder: (context, ref, _) {
+              final isVoting = ref.watch(isVotingProvider);
 
-          return AlertDialog(
-            title: const Text("Vote for a Character"),
-            content: isVoting
-                ? const SizedBox(
-                    height: 100,
-                    child: Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  )
-                : SingleChildScrollView(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: gameState.characters
-                          .where((character) => character.isAlive)
-                          .map((character) {
-                        return ListTile(
-                          title: Text(character.name),
-                          onTap: () async {
-                            if (!isVoting) {
-                              ref.read(isVotingProvider.notifier).state = true;
-
-                              // Submit the vote
-                              final updatedState = await gameNotifier.vote(
-                                gameState.gameId,
-                                character,
-                              );
-
-                              if (updatedState != null && dialogContext.mounted) {
-                                // Close the dialog
-                                Navigator.of(dialogContext).pop();
-
-                                // Clean up state and trigger transition
-                                Future.microtask(() {
-                                  ref
-                                      .read(currentCharacterIndexProvider
-                                          .notifier)
-                                      .state = 0;
-                                  ref
-                                      .read(hasFinishedCyclingProvider.notifier)
-                                      .state = false;
+              return AlertDialog(
+                title: const Text("Vote for a Character"),
+                content: isVoting
+                    ? const SizedBox(
+                        height: 100,
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      )
+                    : SingleChildScrollView(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: gameState.characters
+                              .where((character) => character.isAlive)
+                              .map((character) {
+                            return ListTile(
+                              title: Text(character.name),
+                              onTap: () async {
+                                if (!isVoting) {
                                   ref.read(isVotingProvider.notifier).state =
-                                      false;
+                                      true;
 
-                                  // Navigate to NighttimePage
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => NighttimePage(
-                                        gameId: gameState.gameId,
-                                      ),
-                                    ),
+                                  // Submit the vote
+                                  final updatedState = await gameNotifier.vote(
+                                    gameState.gameId,
+                                    character,
                                   );
-                                });
-                              } else if (dialogContext.mounted) {
-                                // Reset state and show error if vote fails
-                                ref.read(isVotingProvider.notifier).state = false;
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'Failed to process vote. Please try again.',
-                                    ),
-                                  ),
-                                );
-                              }
-                            }
-                          },
-                        );
-                      }).toList(),
-                    ),
-                  ),
+
+                                  if (updatedState != null &&
+                                      dialogContext.mounted) {
+                                    // Close the dialog
+                                    Navigator.of(dialogContext).pop();
+
+                                    // Clean up state and trigger transition
+                                    Future.microtask(() {
+                                      ref
+                                          .read(currentCharacterIndexProvider
+                                              .notifier)
+                                          .state = 0;
+                                      ref
+                                          .read(hasFinishedCyclingProvider
+                                              .notifier)
+                                          .state = false;
+                                      ref
+                                          .read(isVotingProvider.notifier)
+                                          .state = false;
+
+                                      // Navigate to NighttimePage
+                                      Navigator.pushReplacement(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => NighttimePage(
+                                            gameId: gameState.gameId,
+                                          ),
+                                        ),
+                                      );
+                                    });
+                                  } else if (dialogContext.mounted) {
+                                    // Reset state and show error if vote fails
+                                    ref.read(isVotingProvider.notifier).state =
+                                        false;
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                          'Failed to process vote. Please try again.',
+                                        ),
+                                      ),
+                                    );
+                                  }
+                                }
+                              },
+                            );
+                          }).toList(),
+                        ),
+                      ),
+              );
+            },
           );
         },
       );
-    },
-  );
-}
+    }
 
     // Start the highlighting cycle on tap
     return GestureDetector(

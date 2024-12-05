@@ -37,7 +37,6 @@ class DialogueOverlay extends ConsumerWidget {
             role: "",
             isAlive: true,
             spritePath: "",
-            
           ),
         )
         .name;
