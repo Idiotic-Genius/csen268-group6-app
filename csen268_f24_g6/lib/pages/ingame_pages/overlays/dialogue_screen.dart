@@ -14,28 +14,33 @@ class DialogueOverlay extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final gameState = ref.watch(gameStateProvider);
-    final highlightedCharacterId = ref.watch(highlightedCharacterProvider); // Watch the highlighted character
     final gameNotifier = ref.read(gameStateProvider.notifier);
+    final highlightedCharacterId = ref.watch(highlightedCharacterProvider);
+    final TextEditingController messageController = TextEditingController();
 
     if (gameState == null) {
       return const Center(child: CircularProgressIndicator());
     }
 
-    // Fetch discussions if not already fetched
-    if (gameState.discussions.isEmpty) {
-      gameNotifier.fetchDiscussion(gameId);
-      return const Center(child: CircularProgressIndicator());
-    }
+    // Filter discussions for the highlighted character
+    final highlightedDialogues = gameState.discussions
+        .where((dialogue) => dialogue.role == highlightedCharacterId)
+        .toList();
 
-    // Find the dialogue for the currently highlighted character
-    final currentDialogue = gameState.discussions.firstWhere(
-      (dialogue) => dialogue.role == highlightedCharacterId,
-      orElse: () => DialogueResponse(
-        role: highlightedCharacterId,
-        content: "No dialogue available for this character.",
-        day: gameState.day,
-      ),
-    );
+    // Get the character's name or fallback to ID
+    final characterName = gameState.characters
+        .firstWhere(
+          (character) => character.id == highlightedCharacterId,
+          orElse: () => Character(
+            id: highlightedCharacterId,
+            name: "You (Investigator)",
+            role: "",
+            isAlive: true,
+            spritePath: "",
+            
+          ),
+        )
+        .name;
 
     return Align(
       alignment: Alignment.bottomCenter,
@@ -47,36 +52,61 @@ class DialogueOverlay extends ConsumerWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Display character's name (if available) or their ID
-            Text(
-              gameState.characters
-                      .firstWhere(
-                        (character) => character.id == highlightedCharacterId,
-                        orElse: () => Character(
-                          id: highlightedCharacterId,
-                          name: "Unknown",
-                          role: "Unknown",
-                          isAlive: true,
-                          spritePath: "",
-                        ),
-                      )
-                      .name ??
-                  "Unknown Character",
-              style: const TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+            // Input Field (Visible only if no dialogues are available)
+            if (gameState.discussions.isEmpty)
+              Column(
+                children: [
+                  TextField(
+                    controller: messageController,
+                    decoration: const InputDecoration(
+                      hintText: "Enter your observations...",
+                      hintStyle: TextStyle(color: Colors.white70),
+                      border: OutlineInputBorder(),
+                    ),
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                  const SizedBox(height: 8),
+                  ElevatedButton(
+                    onPressed: () async {
+                      final message = messageController.text.trim();
+                      if (message.isNotEmpty) {
+                        await gameNotifier.fetchDiscussion(gameId, message);
+                        messageController.clear();
+                      }
+                    },
+                    child: const Text("Submit"),
+                  ),
+                ],
+              )
+            else ...[
+              // Display Character's Name
+              Text(
+                characterName,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
-            ),
-            const SizedBox(height: 8),
-            // Display the dialogue content
-            Text(
-              currentDialogue.content,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-              ),
-            ),
+              const SizedBox(height: 8),
+              // Display Dialogue Content
+              if (highlightedDialogues.isNotEmpty)
+                Text(
+                  highlightedDialogues.first.content,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                )
+              else
+                const Text(
+                  "No dialogue available for this character.",
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
+                  ),
+                ),
+            ],
           ],
         ),
       ),

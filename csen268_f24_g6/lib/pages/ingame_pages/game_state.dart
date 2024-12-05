@@ -7,6 +7,8 @@ final gameStateProvider = StateNotifierProvider<GameStateNotifier, GameState?>(
   (ref) => GameStateNotifier(),
 );
 
+
+
 class GameState {
   final String gameId;
   final String phase;
@@ -98,7 +100,9 @@ class Character {
 
 class GameStateNotifier extends StateNotifier<GameState?> {
   String get baseUrl {
-    return 'http://127.0.0.1:8000';
+    // return 'http://127.0.0.1:8000';
+
+    return 'http://10.0.0.251:8000';
   }
 
   GameStateNotifier() : super(null);
@@ -189,11 +193,12 @@ class GameStateNotifier extends StateNotifier<GameState?> {
   }
 
   /// Fetch discussions from the API and update the state.
-  Future<void> fetchDiscussion(String gameId) async {
+  Future<void> fetchDiscussion(String gameId, String message) async {
+  try {
     final response = await http.post(
       Uri.parse('$baseUrl/game/$gameId/discuss'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'message': "Discussion"}),
+      body: jsonEncode({'message': message}),
     );
 
     if (response.statusCode == 200) {
@@ -202,7 +207,7 @@ class GameStateNotifier extends StateNotifier<GameState?> {
           .map((response) => DialogueResponse.fromJson(response))
           .toList();
 
-      // Update the state with fetched discussions
+      // Update state with new discussions
       if (state != null) {
         state = GameState(
           gameId: state!.gameId,
@@ -217,10 +222,10 @@ class GameStateNotifier extends StateNotifier<GameState?> {
     } else {
       throw Exception('Failed to fetch discussion: ${response.body}');
     }
+  } catch (e) {
+    print("Error fetching discussion: $e");
   }
-
-  /// Handle the voting phase.
-  /// Handle the voting phase.
+}
 /// Handle the voting phase.
 Future<GameState?> vote(String gameId, Character target) async {
   try {

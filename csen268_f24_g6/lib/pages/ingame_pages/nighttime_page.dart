@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'game_state.dart';
+import 'daytime_page.dart';
 
 class NighttimePage extends ConsumerWidget {
   final String gameId;
@@ -12,10 +13,32 @@ class NighttimePage extends ConsumerWidget {
     final gameStateNotifier = ref.read(gameStateProvider.notifier);
     final gameState = ref.watch(gameStateProvider);
 
-    // Trigger the nighttime process when the page loads
+    // Process nighttime actions and update the state
     Future<void> handleNighttime() async {
       try {
         await gameStateNotifier.processNight(gameId);
+
+        // If the game is over, show the winner
+        if (gameState != null && gameState.gameOver) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) => AlertDialog(
+              title: const Text("Game Over"),
+              content: Text(
+                "The winner is ${gameState.winner ?? "unknown"}!",
+              ),
+              actions: [
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.of(context).popUntil((route) => route.isFirst);
+                  },
+                  child: const Text("Exit"),
+                ),
+              ],
+            ),
+          );
+        }
       } catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text("Error processing nighttime: $e")),
@@ -23,6 +46,7 @@ class NighttimePage extends ConsumerWidget {
       }
     }
 
+    // Trigger nighttime logic after page loads
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (gameState != null && gameState.phase == "night") {
         handleNighttime();
@@ -39,7 +63,7 @@ class NighttimePage extends ConsumerWidget {
                 // Background image
                 Positioned.fill(
                   child: Image.asset(
-                    'assets/images/nighttime_background.jpg',
+                    'assets/images/daytime_background.jpg',
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -48,37 +72,48 @@ class NighttimePage extends ConsumerWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
+                      const Text(
                         "Night Actions",
-                        style: const TextStyle(
+                        style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
                           color: Colors.white,
                         ),
                       ),
                       const SizedBox(height: 20),
-                      if (gameState.eliminatedPlayer != null)
-                        Text(
-                          "${gameState.nightMessage}",
-                          style: const TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
-                          textAlign: TextAlign.center,
-                        )
-                      else
-                        const Text(
-                          "No one was eliminated tonight.",
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.white,
-                          ),
-                          textAlign: TextAlign.center,
+                      Text(
+                        gameState.nightMessage ??
+                            "No actions occurred during the night.",
+                        style: const TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
                         ),
+                        textAlign: TextAlign.center,
+                      ),
                       const SizedBox(height: 20),
                       ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context); // Navigate to the next phase
+                        onPressed: () async {
+                          try {
+                            await handleNighttime();
+                            // Redirect to DaytimePage
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DaytimePage(
+                                  numPlayers: gameState.characters.length,
+                                  numKillers: gameState.characters
+                                      .where((char) => char.role == "killer")
+                                      .length,
+                                ),
+                              ),
+                            );
+                          } catch (e) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                  content: Text(
+                                      "Error transitioning to daytime: $e")),
+                            );
+                          }
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.red,
