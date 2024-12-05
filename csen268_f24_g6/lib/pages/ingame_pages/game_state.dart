@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 
@@ -91,17 +93,25 @@ class Character {
       name: json['name'],
       role: json['role'],
       isAlive: json['is_alive'],
-      spritePath: '', // To be assigned separately
+      spritePath: '', 
     );
   }
 }
 
 class GameStateNotifier extends StateNotifier<GameState?> {
-  String get baseUrl {
-    // return 'http://127.0.0.1:8000';
-
+ 
+ String get baseUrl {
+  if (kIsWeb) {
+    // If running on a web app
+    return 'http://127.0.0.1:8000';
+  } else if (Platform.isWindows) {
+    // If running on a Windows app
+    return 'http://127.0.0.1:8000';
+  } else {
+    // Assume mobile (iOS or Android)
     return 'http://10.0.0.251:8000';
   }
+}
 
   GameStateNotifier() : super(null);
 

@@ -23,11 +23,15 @@ class NighttimePage extends ConsumerWidget {
         if (gameState != null && gameState.gameOver) {
 
           bool didWin = gameState.winner == "villagers";
-          String statType = didWin ? 'gamesWon' : 'gamesLost';
+           String statType = didWin ? 'gamesWon' : 'gamesLost'; 
+
+
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => WinLoseScreen(didWin: didWin,),
+              builder: (context) => WinLoseScreen(didWin: didWin,
+               statType: statType,),
+             
             ),
           );
         }
@@ -53,7 +57,7 @@ class NighttimePage extends ConsumerWidget {
                 // Background image
                 Positioned.fill(
                   child: Image.asset(
-                    'assets/images/nighttime_background.jpg',
+                    'assets/images/nighttime_background_1.jpeg',
                     fit: BoxFit.cover,
                   ),
                 ),
