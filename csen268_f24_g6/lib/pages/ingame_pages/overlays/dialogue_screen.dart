@@ -53,12 +53,13 @@ class DialogueOverlay extends ConsumerWidget {
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Input Field (Visible only if no dialogues are available)
             if (gameState.discussions.isEmpty)
               Column(
                 children: [
+                  if (!isLoading)
                   TextField(
                     controller: messageController,
                     decoration: const InputDecoration(
