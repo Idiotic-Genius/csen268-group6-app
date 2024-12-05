@@ -49,6 +49,7 @@ class MyApp extends StatelessWidget {
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
       home: const SplashScreen(),
 =======
      home: const DaytimePage(numPlayers: 5, numKillers: 1,),
@@ -59,6 +60,9 @@ class MyApp extends StatelessWidget {
 =======
      home: DaytimePage(numPlayers: 5, numKillers: 1),
 >>>>>>> 9b1ad18 (FLOW DONE with win screen)
+=======
+     home: AuthWrapper(),
+>>>>>>> 17a01c3 (FLOW DONE with win screen)
     );
   }
 }
