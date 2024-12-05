@@ -20,6 +20,7 @@ class HomePage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Spacer(),
                   TitleImages(
                     imagePaths: ['assets/images/Title.png'],
                     columnHeight: 80,
