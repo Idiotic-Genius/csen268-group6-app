@@ -15,11 +15,12 @@ class HomePage extends StatelessWidget {
         children: [
           BackgroundImage(),
           Padding(
-            padding: EdgeInsets.only(top: 25, bottom: 25),
+            padding: EdgeInsets.only(top: 10, bottom: 10),
             child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  Spacer(),
                   TitleImages(
                     imagePaths: ['assets/images/Title.png'],
                     columnHeight: 80,

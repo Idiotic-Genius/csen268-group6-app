@@ -86,11 +86,12 @@ class _ProfilePageState extends State<ProfilePage> {
         children: [
           const BackgroundImage(),
           Padding(
-            padding: const EdgeInsets.only(top: 25, bottom: 25),
+            padding: const EdgeInsets.only(top: 10, bottom: 10),
             child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
+                  const Spacer(),
                   const TitleImages(
                     imagePaths: [
                       'assets/images/player_text.png',
@@ -98,14 +99,13 @@ class _ProfilePageState extends State<ProfilePage> {
                     ],
                     columnHeight: 100,
                   ),
-                  const SizedBox(height: 25),
-                  Expanded(
-                    child: PlayerStatsTextBox(
-                     playerName: playerName,  // Use the fetched playerName here
-                      gamesWon: stats?['gamesWon'] ?? 0,  // Get the actual value of gamesWon
-                      gamesLost: stats?['gamesLost'] ?? 0
-                    ),
-                  )
+                  const Spacer(),
+                  PlayerStatsTextBox(
+                   playerName: playerName,  // Use the fetched playerName here
+                    gamesWon: stats?['gamesWon'] ?? 0,  // Get the actual value of gamesWon
+                    gamesLost: stats?['gamesLost'] ?? 0
+                  ),
+                  const Spacer()
                 ],
               ),
             ),
@@ -167,7 +167,7 @@ void _showLogoutConfirmationDialog(BuildContext context, AuthService authService
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => LoginScreen()),
+                    builder: (context) => const LoginScreen()),
               ); // Navigate to login
             },
             child: const Text("Yes"),

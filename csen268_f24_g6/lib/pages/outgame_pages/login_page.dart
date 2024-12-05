@@ -91,9 +91,9 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             child: Center(
               child: Container(
-                padding: const EdgeInsets.all(10),
-                width: containerWidth,
-                height: containerHeight,
+                // padding: const EdgeInsets.all(10),
+                width: 400,
+                height: 300,
                 decoration: BoxDecoration(
                   color: Colors.black.withOpacity(0.3),
                   borderRadius: BorderRadius.circular(15),
@@ -109,17 +109,19 @@ class _LoginScreenState extends State<LoginScreen> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    // const SizedBox(height: 0),
                     SizedBox(
-                      width: 282,
-                      height: 55,
+                      width: 300,
+                      height: 40,
                       child: TextField(
                         controller: _usernameController,
                         textAlign: TextAlign.center,
+                        textAlignVertical: TextAlignVertical.center,
+                        style: GoogleFonts.irishGrover(fontSize: 25, color: Colors.black.withOpacity(1.0)),
                         decoration: InputDecoration(
                           hintText: 'Email',
                           hintStyle: GoogleFonts.irishGrover(
-                            fontSize: 40,
+                            fontSize: 35,
                             color: Colors.black.withOpacity(0.5),
                           ),
                           filled: true,
@@ -131,20 +133,22 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 10),
                     SizedBox(
-                      width: 282,
-                      height: 55,
+                      width: 300,
+                      height: 40,
                       child: TextField(
                         controller: _passwordController,
                         obscureText: true,
                         textAlign: TextAlign.center,
+                        textAlignVertical: TextAlignVertical.center,
+                        style: GoogleFonts.irishGrover(fontSize: 25, color: Colors.black.withOpacity(1.0)),
                         decoration: InputDecoration(
                           hintText: 'Password',
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 15, horizontal: 10),
                           hintStyle: GoogleFonts.irishGrover(
-                            fontSize: 40,
+                            fontSize: 35,
                             color: Colors.black.withOpacity(0.5),
                           ),
                           filled: true,
@@ -156,13 +160,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 10),
                     ElevatedButton(
                       onPressed: _isLoading ? null : () => handleLogin(context),
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 50, vertical: 15),
+                            horizontal: 50, vertical: 10),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
                         ),
