@@ -5,7 +5,6 @@ import 'game_state.dart';
 import 'daytime_game.dart';
 import 'nighttime_page.dart';
 
-
 class DaytimePage extends ConsumerWidget {
   final int numPlayers;
   final int numKillers;
@@ -24,7 +23,7 @@ class DaytimePage extends ConsumerWidget {
     // Check for gameOver before initializing or transitioning
     if (gameState != null && gameState.gameOver) {
       bool didWin = gameState.winner == "villagers";
-      String statType = didWin ? 'gamesWon' : 'gamesLost'; 
+      String statType = didWin ? 'gamesWon' : 'gamesLost';
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.pushReplacement(
           context,
@@ -45,7 +44,6 @@ class DaytimePage extends ConsumerWidget {
 
     // Function to navigate to NighttimePage
     void navigateToNighttime() {
-
       if (gameState != null) {
         print("Navigating to nighttime...");
         print(gameState.phase);
@@ -66,13 +64,35 @@ class DaytimePage extends ConsumerWidget {
     }
 
     return Scaffold(
-      body: gameState == null
-          ? const Center(
-              child: CircularProgressIndicator(),
-            )
-          : DaytimeGame(
-              onEliminationComplete: navigateToNighttime,
+      body: Stack(
+        children: [
+          gameState == null
+              ? const Center(child: CircularProgressIndicator())
+              : DaytimeGame(
+                  onEliminationComplete: navigateToNighttime,
+                ),
+          // Top-left display for day number and phase
+          Positioned(
+            top: 16.0,
+            left: 16.0,
+            child: Container(
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: Colors.black.withOpacity(0.6),
+                borderRadius: BorderRadius.circular(8.0),
+              ),
+              child: Text(
+                "Day ${gameState?.day ?? 0}",
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
+          ),
+        ],
+      ),
     );
   }
 
