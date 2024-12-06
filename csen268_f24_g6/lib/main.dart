@@ -1,10 +1,5 @@
 import 'package:csen268.f24.g6/firebase_options.dart';
-import 'package:csen268.f24.g6/pages/ingame_pages/daytime_page.dart';
-import 'package:csen268.f24.g6/pages/outgame_pages/Authwrapper.dart';
-import 'package:csen268.f24.g6/pages/outgame_pages/game_settings_page.dart';
-import 'package:csen268.f24.g6/pages/outgame_pages/home_page.dart';
-import 'package:csen268.f24.g6/pages/outgame_pages/login_page.dart';
-import 'package:csen268.f24.g6/pages/outgame_pages/profile_page.dart';
+import 'package:csen268.f24.g6/pages/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,7 +32,6 @@ void main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -46,7 +40,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const AuthWrapper(),
+      home: const SplashScreen(),
     );
   }
 }
+

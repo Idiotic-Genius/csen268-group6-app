@@ -11,14 +11,13 @@ class GameSettingTextBox extends StatefulWidget {
 }
 
 class _GameSettingTextBoxState extends State<GameSettingTextBox> {
-  double killers = 2;
-  double doctors = 1;
+  double killers = 1;
+  // double doctors = 1;
   double innocents = 3;
   double timePerRound = 30;
 
   @override
   Widget build(BuildContext context) {
-    // List of settings
     List<Map<String, dynamic>> settings = [
       {
         'label': 'Killers',
@@ -27,13 +26,13 @@ class _GameSettingTextBoxState extends State<GameSettingTextBox> {
         'minValue': 1.0,
         'onChanged': (value) => setState(() => killers = value)
       },
-      {
-        'label': 'Doctors',
-        'value': doctors,
-        'maxValue': 2.0,
-        'minValue': 1.0,
-        'onChanged': (value) => setState(() => doctors = value)
-      },
+      // {
+      //   'label': 'Doctors',
+      //   'value': doctors,
+      //   'maxValue': 2.0,
+      //   'minValue': 1.0,
+      //   'onChanged': (value) => setState(() => doctors = value)
+      // },
       {
         'label': 'Innocents',
         'value': innocents,
@@ -50,64 +49,64 @@ class _GameSettingTextBoxState extends State<GameSettingTextBox> {
       },
     ];
 
-    return Container(
-      width: widget.gameSettingsMode ? 500 : 300,
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: widget.gameSettingsMode // Check if scrolling is enabled
-          ? Scrollbar(
-              thumbVisibility: true,
-              thickness: 6.0,
-              radius: const Radius.circular(10),
-              child: Center(
-                child: SingleChildScrollView(
-                  // Enable scrolling
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Text(
-                      //   'Game Settings',
-                      //   style: customTextStyle(30),
-                      //   textAlign: TextAlign.center,
-                      // ),
-                      // const SizedBox(height: 16),
-                      for (var setting in settings)
-                        _buildSettingRow(
-                          setting['label'],
-                          setting['value'],
-                          setting['maxValue'],
-                          setting['minValue'],
-                          widget.gameSettingsMode,
-                          setting['onChanged'],
-                        ),
-                    ],
+    return Row(
+      children: [
+        Spacer(),
+        Container(
+          width: widget.gameSettingsMode ? 500 : 300,
+          padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 10.0, bottom: 10.0),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: widget.gameSettingsMode
+              ? Scrollbar(
+                  thumbVisibility: true,
+                  thickness: 6.0,
+                  radius: const Radius.circular(10),
+                  child: Center(
+                    child: SingleChildScrollView(
+                      // Enable scrolling
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          for (var setting in settings)
+                            _buildSettingRow(
+                              setting['label'],
+                              setting['value'],
+                              setting['maxValue'],
+                              setting['minValue'],
+                              widget.gameSettingsMode,
+                              setting['onChanged'],
+                            ),
+                        ],
+                      ),
+                    ),
                   ),
+                )
+              : Column(
+                  // Non-scrollable content
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Game Settings',
+                      style: customTextStyle(30),
+                      textAlign: TextAlign.center,
+                    ),
+                    for (var setting in settings)
+                      _buildSettingRow(
+                        setting['label'],
+                        setting['value'],
+                        setting['maxValue'],
+                        setting['minValue'],
+                        widget.gameSettingsMode,
+                        setting['onChanged'],
+                      ),
+                  ],
                 ),
-              ),
-            )
-          : Column(
-              // Non-scrollable content
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Game Settings',
-                  style: customTextStyle(30),
-                  textAlign: TextAlign.center,
-                ),
-                for (var setting in settings)
-                  _buildSettingRow(
-                    setting['label'],
-                    setting['value'],
-                    setting['maxValue'],
-                    setting['minValue'],
-                    widget.gameSettingsMode,
-                    setting['onChanged'],
-                  ),
-              ],
-            ),
+        ),
+        Spacer(),
+      ],
     );
   }
 
@@ -137,7 +136,6 @@ class _GameSettingTextBoxState extends State<GameSettingTextBox> {
             activeColor: Colors.white,
             inactiveColor: Colors.grey,
           ),
-        const SizedBox(height: 8),
       ],
     );
   }

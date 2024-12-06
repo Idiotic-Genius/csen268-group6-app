@@ -15,27 +15,31 @@ class PlayerStatsTextBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 250,
-      width: 400,
-      padding: const EdgeInsets.all(16.0),
-      decoration: BoxDecoration(
-        color: Colors.black.withOpacity(0.5),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            playerName,
-            style: customTextStyle(30),
+    return Row(
+      children: [
+        Spacer(),
+        Container(
+          padding: const EdgeInsets.only(left: 25.0, right: 25.0, top: 10.0, bottom: 10.0),
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.5),
+            borderRadius: BorderRadius.circular(8),
           ),
-          const SizedBox(height: 12),
-          _buildStatRow('Games Won', gamesWon),
-          _buildStatRow('Games Lost', gamesLost),
-        ]
-      ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                playerName,
+                style: customTextStyle(30),
+              ),
+              const SizedBox(height: 10),
+              _buildStatRow('Games Won', gamesWon),
+              _buildStatRow('Games Lost', gamesLost),
+            ]
+          ),
+        ),
+        Spacer(),
+      ],
     );
   }
 

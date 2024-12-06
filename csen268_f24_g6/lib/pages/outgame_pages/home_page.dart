@@ -31,11 +31,12 @@ class HomePage extends StatelessWidget {
         children: [
           const BackgroundImage(),
           Padding(
-            padding: const EdgeInsets.only(top: 25, bottom: 25),
+            padding: EdgeInsets.only(top: 10, bottom: 10),
             child: Center(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
-                children: const [
+                children: [
+                  Spacer(),
                   TitleImages(
                     imagePaths: ['assets/images/Title.png'],
                     columnHeight: 80,
@@ -47,6 +48,7 @@ class HomePage extends StatelessWidget {
                     gameSettingsMode: false,
                     enablePlaySettingButtons: true,
                   ),
+                  Spacer()
                 ],
               ),
             ),
