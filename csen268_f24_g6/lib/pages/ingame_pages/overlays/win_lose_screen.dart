@@ -3,9 +3,10 @@ import 'package:csen268.f24.g6/pages/outgame_pages/components/text_styles.dart';
 import 'package:csen268.f24.g6/pages/outgame_pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart'; // Added import
 import '../game_state.dart';
 
-class WinLoseScreen extends StatelessWidget {
+class WinLoseScreen extends ConsumerWidget {
   final bool didWin;
   final String statType;
   final List<Character> characters;
@@ -48,7 +49,7 @@ class WinLoseScreen extends StatelessWidget {
         if (userDoc.exists) {
           Map<String, dynamic> stats =
               (userDoc.data() as Map<String, dynamic>)['stats'] ??
-              {'gamesWon': 0, 'gamesLost': 0};
+                  {'gamesWon': 0, 'gamesLost': 0};
 
           // Increment the relevant stat
           stats[statType] = (stats[statType] ?? 0) + 1;
@@ -63,8 +64,9 @@ class WinLoseScreen extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
-      _updateStats();
+  Widget build(BuildContext context, WidgetRef ref) {
+    _updateStats();
+
     return Scaffold(
       body: Stack(
         children: [
@@ -77,8 +79,8 @@ class WinLoseScreen extends StatelessWidget {
               ),
               child: Image.asset(
                 didWin
-                  ? 'assets/images/daytime_background.gif'
-                  : 'assets/images/nighttime_background.gif',
+                    ? 'assets/images/daytime_background.gif'
+                    : 'assets/images/nighttime_background.gif',
                 fit: BoxFit.cover,
               ),
             ),
@@ -102,6 +104,9 @@ class WinLoseScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
+                    // Reset the game state before going home
+                    ref.read(gameStateProvider.notifier).reset();
+
                     // Navigate back to the Home Page
                     Navigator.of(context).pushAndRemoveUntil(
                       MaterialPageRoute(

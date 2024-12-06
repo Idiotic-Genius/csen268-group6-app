@@ -99,6 +99,11 @@ class Character {
 }
 
 class GameStateNotifier extends StateNotifier<GameState?> {
+
+  void reset() {
+    state = null;
+    print("Game state has been reset.");
+  }
  
  String get baseUrl {
   if (kIsWeb) {

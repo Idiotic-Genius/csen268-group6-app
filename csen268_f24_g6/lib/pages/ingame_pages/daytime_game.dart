@@ -145,6 +145,7 @@ class DaytimeGame extends ConsumerWidget {
                                       ),
                                     );
                                     
+                                    
                                     showEliminationDialog(context, eliminatedCharacter);
                                   } else if (dialogContext.mounted) {
                                     // Reset state and show error if vote fails
