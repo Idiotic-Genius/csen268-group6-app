@@ -14,7 +14,8 @@ class NarratorScreen extends StatefulWidget {
   State<NarratorScreen> createState() => _NarratorScreenState();
 }
 
-class _NarratorScreenState extends State<NarratorScreen> with SingleTickerProviderStateMixin {
+class _NarratorScreenState extends State<NarratorScreen>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
 
@@ -89,10 +90,11 @@ Let the investigation begin...
                     ElevatedButton(
                       onPressed: widget.onComplete,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
+                        backgroundColor: Colors.white,
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 24,
-                          vertical: 12,
+                            horizontal: 50, vertical: 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       child: const Text(

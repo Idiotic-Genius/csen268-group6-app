@@ -15,7 +15,6 @@ class NighttimePage extends ConsumerWidget {
     final gameStateNotifier = ref.read(gameStateProvider.notifier);
     final gameState = ref.watch(gameStateProvider);
     final Nightcount = (gameState?.day ?? 1) - 1;
-    
 
     // Handle nighttime logic
     Future<void> handleNighttime() async {
@@ -49,10 +48,8 @@ class NighttimePage extends ConsumerWidget {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (gameState != null && gameState.phase == "night") {
         handleNighttime();
-        
       }
     });
-    
 
     return Scaffold(
       body: Stack(
@@ -74,7 +71,6 @@ class NighttimePage extends ConsumerWidget {
                           Text(
                             "Night Actions",
                             style: customTextStyle(28),
-                            
                           ),
                           const SizedBox(height: 20),
                           Text(
@@ -99,9 +95,17 @@ class NighttimePage extends ConsumerWidget {
                               );
                             },
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.red,
+                              backgroundColor: Colors.black,
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 50, vertical: 10),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
                             ),
-                            child: const Text("Continue"),
+                            child: const Text(
+                              "Continue",
+                              style: TextStyle(color: Colors.white),
+                            ),
                           ),
                         ],
                       ),
@@ -120,7 +124,6 @@ class NighttimePage extends ConsumerWidget {
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Text(
-                  
                   "Night ${Nightcount}",
                   style: const TextStyle(
                     color: Colors.white,

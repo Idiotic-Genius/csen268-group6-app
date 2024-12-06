@@ -60,17 +60,25 @@ class DialogueOverlay extends ConsumerWidget {
               Column(
                 children: [
                   if (!isLoading)
-                  TextField(
-                    controller: messageController,
-                    decoration: const InputDecoration(
-                      hintText: "Enter your observations...",
-                      hintStyle: TextStyle(color: Colors.white70),
-                      border: OutlineInputBorder(),
+                    TextField(
+                      controller: messageController,
+                      decoration: const InputDecoration(
+                        hintText: "Enter your observations...",
+                        hintStyle: TextStyle(color: Colors.white70),
+                        border: OutlineInputBorder(),
+                      ),
+                      style: const TextStyle(color: Colors.white),
                     ),
-                    style: const TextStyle(color: Colors.white),
-                  ),
                   const SizedBox(height: 8),
                   ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 50, vertical: 10),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
                     onPressed: isLoading
                         ? null
                         : () async {
@@ -79,11 +87,13 @@ class DialogueOverlay extends ConsumerWidget {
                               // Set loading to true
                               ref.read(isLoadingProvider.notifier).state = true;
 
-                              await gameNotifier.fetchDiscussion(gameId, message);
+                              await gameNotifier.fetchDiscussion(
+                                  gameId, message);
                               messageController.clear();
 
                               // Reset loading state after the async operation
-                              ref.read(isLoadingProvider.notifier).state = false;
+                              ref.read(isLoadingProvider.notifier).state =
+                                  false;
                             }
                           },
                     child: isLoading
@@ -91,8 +101,11 @@ class DialogueOverlay extends ConsumerWidget {
                             color: Colors.white,
                             strokeWidth: 2,
                           )
-                        : const Text("Submit"),
-                  ),
+                        : const Text(
+                            "Submit",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                  )
                 ],
               )
             else ...[

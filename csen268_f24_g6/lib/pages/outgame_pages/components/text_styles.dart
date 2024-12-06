@@ -9,22 +9,22 @@ TextStyle customTextStyle(double fontSize) {
     color: Colors.black,
     shadows: const [
       Shadow(
-        blurRadius: 1.0,
+        blurRadius: 0.5,
         color: Colors.white,
         offset: Offset(1.0, 1.0),
       ),
       Shadow(
-        blurRadius: 1.0,
+        blurRadius: 0.5,
         color: Colors.white,
         offset: Offset(-1.0, -1.0),
       ),
       Shadow(
-        blurRadius: 1.0,
+        blurRadius: 0.5,
         color: Colors.white,
         offset: Offset(1.0, -1.0),
       ),
       Shadow(
-        blurRadius: 1.0,
+        blurRadius: 0.5,
         color: Colors.white,
         offset: Offset(-1.0, 1.0),
       ),
