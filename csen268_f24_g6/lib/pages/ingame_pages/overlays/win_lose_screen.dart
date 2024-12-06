@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:csen268.f24.g6/pages/outgame_pages/components/text_styles.dart';
 import 'package:csen268.f24.g6/pages/outgame_pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -46,7 +47,7 @@ class WinLoseScreen extends StatelessWidget {
         DocumentSnapshot userDoc = await userRef.get();
         if (userDoc.exists) {
           Map<String, dynamic> stats =
-              (userDoc.data() as Map<String, dynamic>)['stats'] ?? 
+              (userDoc.data() as Map<String, dynamic>)['stats'] ??
               {'gamesWon': 0, 'gamesLost': 0};
 
           // Increment the relevant stat
@@ -75,7 +76,9 @@ class WinLoseScreen extends StatelessWidget {
                 BlendMode.darken,
               ),
               child: Image.asset(
-                'assets/images/daytime_background_1.jpg',
+                didWin
+                  ? '/images/daytime_background.gif'
+                  : '/images/nighttime_background.gif',
                 fit: BoxFit.cover,
               ),
             ),
@@ -92,56 +95,37 @@ class WinLoseScreen extends StatelessWidget {
                   fit: BoxFit.contain,
                   width: MediaQuery.of(context).size.width * 0.8,
                 ),
-                const SizedBox(height: 20),
                 Text(
                   "The killer was ${_getKillerName()}",
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    shadows: [
-                      Shadow(
-                        blurRadius: 10.0,
-                        color: Colors.black,
-                        offset: Offset(2.0, 2.0),
+                  style: customTextStyle(24),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    // Navigate back to the Home Page
+                    Navigator.of(context).pushAndRemoveUntil(
+                      MaterialPageRoute(
+                        builder: (context) => const HomePage(),
                       ),
-                    ],
+                      (route) => false,
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.red,
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 12,
+                    ),
+                  ),
+                  child: const Text(
+                    "Exit to Home",
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
               ],
-            ),
-          ),
-          // Exit Button
-          Positioned(
-            bottom: 50,
-            left: 0,
-            right: 0,
-            child: Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Navigate back to the Home Page
-                  Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (context) => const HomePage(), 
-                    ),
-                    (route) => false, 
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.red,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 24,
-                    vertical: 12,
-                  ),
-                ),
-                child: const Text(
-                  "Exit to Home",
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
             ),
           ),
         ],

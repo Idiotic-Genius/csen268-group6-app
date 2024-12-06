@@ -57,7 +57,7 @@ class NighttimePage extends ConsumerWidget {
                 // Background image
                 Positioned.fill(
                   child: Image.asset(
-                    'assets/images/nighttime_background_1.jpeg',
+                    '/images/nighttime_background.gif',
                     fit: BoxFit.cover,
                   ),
                 ),

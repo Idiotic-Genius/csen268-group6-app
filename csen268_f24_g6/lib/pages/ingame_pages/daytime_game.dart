@@ -1,5 +1,6 @@
 import 'package:csen268.f24.g6/pages/ingame_pages/nighttime_page.dart';
 import 'package:csen268.f24.g6/pages/ingame_pages/overlays/dialogue_screen.dart';
+import 'package:csen268.f24.g6/pages/outgame_pages/components/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'game_state.dart';
@@ -178,8 +179,10 @@ class DaytimeGame extends ConsumerWidget {
               // Background image
               Positioned.fill(
                 child: Image.asset(
-                  'assets/images/daytime_background_1.jpg',
+                  '/images/daytime_background.gif',
                   fit: BoxFit.cover,
+                  width: double.infinity,
+                  height: double.infinity,
                 ),
               ),
               // Characters row (prevent scaling when the keyboard is visible)
@@ -198,19 +201,14 @@ class DaytimeGame extends ConsumerWidget {
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
+                              Text(
+                                character.name,
+                                style: customTextStyle(20 * scaleY * characterSizeMultiplier)
+                              ),
+                              SizedBox(height: 40 * scaleY),
                               Image.asset(
                                 character.spritePath,
                                 height: 550 * scaleY * characterSizeMultiplier,
-                              ),
-                              SizedBox(height: 40 * scaleY),
-                              Text(
-                                character.name,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize:
-                                      16 * scaleY * characterSizeMultiplier,
-                                ),
                               ),
                             ],
                           ),

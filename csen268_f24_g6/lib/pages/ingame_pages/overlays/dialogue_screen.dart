@@ -3,6 +3,9 @@ import 'package:csen268.f24.g6/pages/ingame_pages/game_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+// Create a StateProvider for the loading state
+final isLoadingProvider = StateProvider<bool>((ref) => false);
+
 class DialogueOverlay extends ConsumerWidget {
   final String gameId;
 
@@ -17,6 +20,7 @@ class DialogueOverlay extends ConsumerWidget {
     final gameNotifier = ref.read(gameStateProvider.notifier);
     final highlightedCharacterId = ref.watch(highlightedCharacterProvider);
     final TextEditingController messageController = TextEditingController();
+    final isLoading = ref.watch(isLoadingProvider);
 
     if (gameState == null) {
       return const Center(child: CircularProgressIndicator());
@@ -45,16 +49,17 @@ class DialogueOverlay extends ConsumerWidget {
       alignment: Alignment.bottomCenter,
       child: Container(
         width: double.infinity,
-        color: Colors.black.withOpacity(0.7),
+        color: Colors.black.withOpacity(0.5),
         padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // Input Field (Visible only if no dialogues are available)
             if (gameState.discussions.isEmpty)
               Column(
                 children: [
+                  if (!isLoading)
                   TextField(
                     controller: messageController,
                     decoration: const InputDecoration(
@@ -66,14 +71,27 @@ class DialogueOverlay extends ConsumerWidget {
                   ),
                   const SizedBox(height: 8),
                   ElevatedButton(
-                    onPressed: () async {
-                      final message = messageController.text.trim();
-                      if (message.isNotEmpty) {
-                        await gameNotifier.fetchDiscussion(gameId, message);
-                        messageController.clear();
-                      }
-                    },
-                    child: const Text("Submit"),
+                    onPressed: isLoading
+                        ? null
+                        : () async {
+                            final message = messageController.text.trim();
+                            if (message.isNotEmpty) {
+                              // Set loading to true
+                              ref.read(isLoadingProvider.notifier).state = true;
+
+                              await gameNotifier.fetchDiscussion(gameId, message);
+                              messageController.clear();
+
+                              // Reset loading state after the async operation
+                              ref.read(isLoadingProvider.notifier).state = false;
+                            }
+                          },
+                    child: isLoading
+                        ? const CircularProgressIndicator(
+                            color: Colors.white,
+                            strokeWidth: 2,
+                          )
+                        : const Text("Submit"),
                   ),
                 ],
               )

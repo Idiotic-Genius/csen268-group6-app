@@ -12,7 +12,7 @@ class GameSettingTextBox extends StatefulWidget {
 
 class _GameSettingTextBoxState extends State<GameSettingTextBox> {
   double killers = 1;
-  double doctors = 1;
+  // double doctors = 1;
   double innocents = 3;
   double timePerRound = 30;
 
@@ -26,13 +26,13 @@ class _GameSettingTextBoxState extends State<GameSettingTextBox> {
         'minValue': 1.0,
         'onChanged': (value) => setState(() => killers = value)
       },
-      {
-        'label': 'Doctors',
-        'value': doctors,
-        'maxValue': 1.0,
-        'minValue': 1.0,
-        'onChanged': (value) => setState(() => doctors = value)
-      },
+      // {
+      //   'label': 'Doctors',
+      //   'value': doctors,
+      //   'maxValue': 2.0,
+      //   'minValue': 1.0,
+      //   'onChanged': (value) => setState(() => doctors = value)
+      // },
       {
         'label': 'Innocents',
         'value': innocents,

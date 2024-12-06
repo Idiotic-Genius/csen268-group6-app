@@ -1,3 +1,4 @@
+import 'package:csen268.f24.g6/pages/outgame_pages/components/text_styles.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -18,8 +19,8 @@ class _NarratorScreenState extends State<NarratorScreen> with SingleTickerProvid
   late Animation<double> _fadeAnimation;
 
   final String narratorText = """
-In a remote village shrouded in mystery, darkness lurks among the innocent. 
-As night falls, killers walk among us, their identities concealed behind masks of normalcy. 
+In a remote village shrouded in mystery, darkness lurks among the innocent.
+As night falls, killers walk among us, their identities concealed behind masks of normalcy.
 You, as the investigator, must lead the villagers to uncover the truth before it's too late.
 
 Let the investigation begin...
@@ -58,7 +59,7 @@ Let the investigation begin...
                 BlendMode.darken,
               ),
               child: Image.asset(
-                'assets/images/daytime_background_1.jpg',
+                'assets/images/daytime_background.gif',
                 fit: BoxFit.cover,
               ),
             ),
@@ -68,8 +69,7 @@ Let the investigation begin...
             child: FadeTransition(
               opacity: _fadeAnimation,
               child: Container(
-                margin: const EdgeInsets.all(32),
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   color: Colors.black.withOpacity(0.7),
                   borderRadius: BorderRadius.circular(16),
@@ -83,15 +83,9 @@ Let the investigation begin...
                   children: [
                     Text(
                       narratorText,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 24,
-                        fontFamily: 'IrishGrover',
-                        height: 1.5,
-                      ),
+                      style: customTextStyle(16),
                       textAlign: TextAlign.center,
                     ),
-                    const SizedBox(height: 24),
                     ElevatedButton(
                       onPressed: widget.onComplete,
                       style: ElevatedButton.styleFrom(
