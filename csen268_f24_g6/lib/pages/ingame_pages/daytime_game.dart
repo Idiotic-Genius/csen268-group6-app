@@ -34,6 +34,32 @@ class DaytimeGame extends ConsumerWidget {
 
     final gameNotifier = ref.read(gameStateProvider.notifier);
 
+    // Add the function definition here, before it's used
+    void showEliminationDialog(BuildContext context, Character eliminatedPlayer) {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text("Elimination Result"),
+            content: Text("${eliminatedPlayer.name} has been eliminated from the village."),
+            actions: [
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  onEliminationComplete();
+                },
+                child: const Text("Continue"),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     // Listen to the highlighted character and the current index
     final highlightedCharacterId = ref.watch(highlightedCharacterProvider);
     final currentCharacterIndex = ref.watch(currentCharacterIndexProvider);
@@ -99,30 +125,27 @@ class DaytimeGame extends ConsumerWidget {
                                     // Close the dialog
                                     Navigator.of(dialogContext).pop();
 
-                                    // Clean up state and trigger transition
-                                    Future.microtask(() {
-                                      ref
-                                          .read(currentCharacterIndexProvider
-                                              .notifier)
-                                          .state = 0;
-                                      ref
-                                          .read(hasFinishedCyclingProvider
-                                              .notifier)
-                                          .state = false;
-                                      ref
-                                          .read(isVotingProvider.notifier)
-                                          .state = false;
+                                    // Clean up state
+                                    ref.read(currentCharacterIndexProvider.notifier).state = 0;
+                                    ref.read(hasFinishedCyclingProvider.notifier).state = false;
+                                    ref.read(isVotingProvider.notifier).state = false;
 
-                                      // Navigate to NighttimePage
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => NighttimePage(
-                                            gameId: gameState.gameId,
-                                          ),
+                                    // Find the character who was just eliminated by comparing alive status
+                                    final eliminatedCharacter = gameState.characters.firstWhere(
+                                      (oldChar) => oldChar.isAlive && 
+                                        updatedState.characters.any((newChar) => 
+                                          newChar.id == oldChar.id && !newChar.isAlive
                                         ),
-                                      );
-                                    });
+                                      orElse: () => Character(
+                                        id: "unknown",
+                                        name: "Unknown",
+                                        role: "unknown",
+                                        isAlive: false,
+                                        spritePath: "",
+                                      ),
+                                    );
+                                    
+                                    showEliminationDialog(context, eliminatedCharacter);
                                   } else if (dialogContext.mounted) {
                                     // Reset state and show error if vote fails
                                     ref.read(isVotingProvider.notifier).state =
