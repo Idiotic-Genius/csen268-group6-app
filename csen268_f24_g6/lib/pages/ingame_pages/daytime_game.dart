@@ -179,7 +179,7 @@ class DaytimeGame extends ConsumerWidget {
               // Background image
               Positioned.fill(
                 child: Image.asset(
-                  '/images/daytime_background.gif',
+                  'assets/images/daytime_background.gif',
                   fit: BoxFit.cover,
                   width: double.infinity,
                   height: double.infinity,

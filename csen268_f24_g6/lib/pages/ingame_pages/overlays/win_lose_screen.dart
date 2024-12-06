@@ -77,8 +77,8 @@ class WinLoseScreen extends StatelessWidget {
               ),
               child: Image.asset(
                 didWin
-                  ? '/images/daytime_background.gif'
-                  : '/images/nighttime_background.gif',
+                  ? 'assets/images/daytime_background.gif'
+                  : 'assets/images/nighttime_background.gif',
                 fit: BoxFit.cover,
               ),
             ),
