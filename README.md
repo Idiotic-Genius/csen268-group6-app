@@ -1,5 +1,4 @@
-# csen268-group6-app
-# Flutter Game with Python Backend
+# csen268-group6-app | Flutter Game with Python Backend
 
 Welcome to the **MAFIA - Murder Mystery in the Woods** repository!
 
@@ -11,11 +10,6 @@ The game takes place in a small town in the woods where murders have been plagui
 you (the player) are an investigator who has been tasked to find and eliminate the killers.
 You will need to converse with the townspeople to figure out whose lying or telling the truth
 and determine based on their accounts who the killers are and save the town.
-
----
-
-## 🗂️ Project Structure
-
 
 ---
 
@@ -74,6 +68,57 @@ and determine based on their accounts who the killers are and save the town.
     ```bash
     cd frontend
     flutter pub get
+    flutter run
     ```
-3. Navigate to the `main.dart` file in the `frontend` folder and run the flutter app.
+3. Run the Flutter app.
+    ```bash
+    flutter run
+    ```
+---
 
+## 🎮 Gameplay Overview
+
+### Day Phase
+Make a statement to townspeople and listen to their responses to gather information.
+Decide who the suspect may be based on the AI-generated dialogue.
+### Voting Phase
+Players and AI agents vote on the suspected killer.
+The individual with the most votes is eliminated.
+### Night Phase
+AI agents perform their roles: killers choose a victim, doctors attempt to save lives, and townsfolk sleep.
+Goes back to the Day Phase until a win/lose condition is met.
+### Winning or Losing
+Win: Eliminate all the killers before they outnumber the townspeople.
+Lose: If killers equal or outnumber townspeople, the killers win.
+
+---
+
+## 🌟 Screenshots
+
+![image](https://github.com/user-attachments/assets/6e1dc4ee-642b-4747-bdcb-31de3f31c388)
+![image](https://github.com/user-attachments/assets/330510a1-cd37-41dc-a0b3-c0dcdfb66559)
+![image](https://github.com/user-attachments/assets/56601136-b313-488e-8e6b-b22fc5535b1e)
+![image](https://github.com/user-attachments/assets/d681dba5-1ac0-46c8-b3f3-a32ac0baa6f2)
+![image](https://github.com/user-attachments/assets/3250a02d-3aa5-42f4-959d-539a17b609a9)
+![image](https://github.com/user-attachments/assets/0a923953-d89e-4349-b40d-5fe4a14f3a41)
+![image](https://github.com/user-attachments/assets/358e2f10-c542-4522-89c7-c15f3fe0fef3)
+![image](https://github.com/user-attachments/assets/ecf8c814-ef78-4af9-b7fb-0ce3f512c0d6)
+
+---
+
+## 💡 Future Plans
+
+### Tracking Wins and Losses on User Profiles
+Adding functionality to record and display users' game outcomes (wins and losses) on their profile within the backend system.
+
+### Game Settings Configuration
+​Adjusting game settings and saving it to be reflected when the next game is started.
+
+### Improving UI Elements 
+​Some UI elements like the logout, dialogue buttons, and sliders aren't all uniform in style.
+
+### Dialogue History 
+​Give the ability for the users to look back on what all the characters have said in the past to better deduce whose who.
+
+### Sound Effects / Music / VoiceOvers 
+​Additional music and sound effects for button presses and or voice overs for the character dialogues would be bring the game to life.
