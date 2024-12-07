@@ -25,26 +25,6 @@
             "flutterMode": "release"
         },
         {
-            "name": "kimsong_ui_testing",
-            "cwd": "kimsong_ui_testing",
-            "request": "launch",
-            "type": "dart"
-        },
-        {
-            "name": "kimsong_ui_testing (profile mode)",
-            "cwd": "kimsong_ui_testing",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "profile"
-        },
-        {
-            "name": "kimsong_ui_testing (release mode)",
-            "cwd": "kimsong_ui_testing",
-            "request": "launch",
-            "type": "dart",
-            "flutterMode": "release"
-        },
-        {
             "name": "Flutter Web",
             "request": "launch",
             "type": "dart",
