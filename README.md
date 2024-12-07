@@ -21,7 +21,7 @@ and determine based on their accounts who the killers are and save the town.
 
 ## 🚀 Features
 
-- **Authenticated Signup/Login:** ...
+- **Authenticated Signup/Login:** User authentication for login and signup, as well as user statistics management, are implemented using Firebase Authentication and Firebase Realtime Database.
 - **Landscape Orientation Locking:** To avoid disruptions between in and out of game screens we have ensured that the orientation of the game is locked to Landscape.
 - **Animated Splash Screen:** The animated splash screen was implmeneted using Lottie for the animations and a simple delay timer to showcase the animation before routing users to the Firebase Authencation Wrapper.
 - **Animated Buttons:** Due the simplicity of these animations, we used Flutters in-built Animation class to implement these simple transform animations that simulate a button press.
